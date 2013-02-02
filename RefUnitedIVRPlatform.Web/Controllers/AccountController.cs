@@ -10,6 +10,8 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using RefUnitedIVRPlatform.Web.Filters;
 using RefUnitedIVRPlatform.Web.Models;
+using RefUnitedIVRPlatform.Common.Interfaces;
+using RefUnitedIVRPlatform.Data.Managers;
 
 namespace RefUnitedIVRPlatform.Web.Controllers
 {
@@ -17,8 +19,13 @@ namespace RefUnitedIVRPlatform.Web.Controllers
   [InitializeSimpleMembership]
   public class AccountController : Controller
   {
-    //
-    // GET: /Account/Login
+
+    private IRefugeesUnitedAccountManager refUnitedAccountManager;
+
+    public AccountController()
+    {
+      refUnitedAccountManager = new RefugeesUnitedAccountManager();
+    }
 
     [AllowAnonymous]
     public ActionResult Login(string returnUrl)
@@ -35,7 +42,7 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     [ValidateAntiForgeryToken]
     public ActionResult Login(LoginModel model, string returnUrl)
     {
-      if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
+      if (ModelState.IsValid && refUnitedAccountManager.ValidateLogin(model.UserName, model.Password))
       {
         return RedirectToLocal(returnUrl);
       }

@@ -5,7 +5,7 @@
   <title>@ViewBag.Title - My ASP.NET MVC Application</title>
   <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
   <meta name="viewport" content="width=device-width" />
-  @Styles.Render("~/Content/css", "~/bundles/bootstrap")
+  @Styles.Render("~/bundles/bootstrap")
   @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
@@ -28,16 +28,17 @@
       </div>
     </div>
   </header>-->
-    <div class="navbar">
+  <div class="navbar">
     <div class="navbar-inner">
-      <a class="brand" href="#">Refugees United - IVR Platform</a>
-      <ul class="nav">
+      <a class="brand" href="@Url.Action("Index", "Home")">Refugees United - IVR Platform</a>
+      @*<ul class="nav">
         <li class="active"><a href="@Url.Action("Index", "Designer")">Designer</a></li>
-      </ul>
+      </ul>*@
     </div>
   </div>
-
-  @RenderBody()
+  <div class="container">
+    @RenderBody()
+  </div>
 
 
   @Scripts.Render("~/bundles/jquery", "~/bundles/jslibs")

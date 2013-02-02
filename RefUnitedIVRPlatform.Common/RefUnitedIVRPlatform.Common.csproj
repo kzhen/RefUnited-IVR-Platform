@@ -42,6 +42,7 @@
     <Compile Include="Entities\Profile.cs" />
     <Compile Include="Interfaces\IProfileManager.cs" />
     <Compile Include="Interfaces\IProfileRepository.cs" />
+    <Compile Include="Interfaces\IRefugeesUnitedAccountManager.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

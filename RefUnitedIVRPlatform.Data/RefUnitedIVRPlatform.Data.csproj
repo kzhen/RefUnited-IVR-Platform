@@ -40,10 +40,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Managers\ProfileManager.cs" />
+    <Compile Include="Managers\RefugeesUnitedAccountManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ProfileRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\refunited-dotnet-client\RefugeesUnitedApi\RefugeesUnitedApi.csproj">
+      <Project>{e6ef07c8-901e-407c-949f-d08fbb40b78b}</Project>
+      <Name>RefugeesUnitedApi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RefUnitedIVRPlatform.Common\RefUnitedIVRPlatform.Common.csproj">
       <Project>{138ece08-5a78-409f-9f21-25b3e18b679d}</Project>
       <Name>RefUnitedIVRPlatform.Common</Name>
