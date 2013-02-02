@@ -12,19 +12,19 @@ using RefUnitedIVRPlatform.Web.Filters;
 using RefUnitedIVRPlatform.Web.Models;
 using RefUnitedIVRPlatform.Common.Interfaces;
 using RefUnitedIVRPlatform.Data.Managers;
+using RefUnitedIVRPlatform.Common.Entities;
 
 namespace RefUnitedIVRPlatform.Web.Controllers
 {
-  [Authorize]
-  [InitializeSimpleMembership]
   public class AccountController : Controller
   {
-
     private IRefugeesUnitedAccountManager refUnitedAccountManager;
+    private IProfileManager profileManager;
 
-    public AccountController()
+    public AccountController(IRefugeesUnitedAccountManager refUnitedManager, IProfileManager profileManager)
     {
-      refUnitedAccountManager = new RefugeesUnitedAccountManager();
+      this.refUnitedAccountManager = refUnitedManager;
+      this.profileManager = profileManager;
     }
 
     [AllowAnonymous]
@@ -34,17 +34,19 @@ namespace RefUnitedIVRPlatform.Web.Controllers
       return View();
     }
 
-    //
-    // POST: /Account/Login
-
     [HttpPost]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public ActionResult Login(LoginModel model, string returnUrl)
     {
-      if (ModelState.IsValid && refUnitedAccountManager.ValidateLogin(model.UserName, model.Password))
+      var authResults = refUnitedAccountManager.ValidateLogin(model.UserName, model.Password);
+
+      if (ModelState.IsValid && authResults.Authenticated)
       {
-        return RedirectToLocal(returnUrl);
+        var profile = refUnitedAccountManager.GetProfile(authResults.ProfileId);
+        profile.ProfileId = authResults.ProfileId;
+
+        return View("VerifyProfile", profile);
       }
 
       // If we got this far, something failed, redisplay form
@@ -59,120 +61,51 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     [ValidateAntiForgeryToken]
     public ActionResult LogOff()
     {
-      WebSecurity.Logout();
-
       return RedirectToAction("Index", "Home");
     }
 
-    //
-    // GET: /Account/Register
-
-    [AllowAnonymous]
-    public ActionResult Register()
-    {
-      return View();
-    }
-
-    //
-    // POST: /Account/Register
-
     [HttpPost]
-    [AllowAnonymous]
     [ValidateAntiForgeryToken]
-    public ActionResult Register(RegisterModel model)
+    public ActionResult VerifyProfile(RefugeesUnitedApi.ApiEntities.Profile profile)
     {
       if (ModelState.IsValid)
       {
-        // Attempt to register the user
-        try
-        {
-          WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
-          WebSecurity.Login(model.UserName, model.Password);
-          return RedirectToAction("Index", "Home");
-        }
-        catch (MembershipCreateUserException e)
-        {
-          ModelState.AddModelError("", ErrorCodeToString(e.StatusCode));
-        }
-      }
+        //check if they have changed anything...
+        //if(hasChanged)
+        //{
+        refUnitedAccountManager.UpdateProfile(profile);
+        var model = refUnitedAccountManager.GetProfile(profile.ProfileId);
+        //} 
+        //else 
+        //{
+        //
+        //}
 
-      // If we got this far, something failed, redisplay form
-      return View(model);
-    }
-
-    public ActionResult Manage(ManageMessageId? message)
-    {
-      ViewBag.StatusMessage =
-          message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-          : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-          : message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
-          : "";
-      ViewBag.HasLocalPassword = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
-      ViewBag.ReturnUrl = Url.Action("Manage");
-      return View();
-    }
-
-    //
-    // POST: /Account/Manage
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public ActionResult Manage(LocalPasswordModel model)
-    {
-      bool hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
-      ViewBag.HasLocalPassword = hasLocalAccount;
-      ViewBag.ReturnUrl = Url.Action("Manage");
-      if (hasLocalAccount)
-      {
-        if (ModelState.IsValid)
-        {
-          // ChangePassword will throw an exception rather than return false in certain failure scenarios.
-          bool changePasswordSucceeded;
-          try
-          {
-            changePasswordSucceeded = WebSecurity.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword);
-          }
-          catch (Exception)
-          {
-            changePasswordSucceeded = false;
-          }
-
-          if (changePasswordSucceeded)
-          {
-            return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
-          }
-          else
-          {
-            ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
-          }
-        }
+        return View("SetupPINAccess", model);
       }
       else
       {
-        // User does not have a local password so remove any validation errors caused by a missing
-        // OldPassword field
-        ModelState state = ModelState["OldPassword"];
-        if (state != null)
-        {
-          state.Errors.Clear();
-        }
-
-        if (ModelState.IsValid)
-        {
-          try
-          {
-            WebSecurity.CreateAccount(User.Identity.Name, model.NewPassword);
-            return RedirectToAction("Manage", new { Message = ManageMessageId.SetPasswordSuccess });
-          }
-          catch (Exception e)
-          {
-            ModelState.AddModelError("", e);
-          }
-        }
+        return RedirectToAction("Index", "Home");
       }
+    }
 
-      // If we got this far, something failed, redisplay form
-      return View(model);
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult SetupPINAccess(FormCollection form)
+    {
+      int profileId = int.Parse(form["profileId"]);
+      string pin = form["PIN"];
+
+      string phoneNumber = string.Format("{0}{1}", form["DialCode"], form["CellPhoneNumber"]);
+
+      var result = profileManager.CreatePin(phoneNumber, pin, profileId);
+
+      return RedirectToAction("SetupComplete", new { existingPin = result });
+    }
+
+    public ActionResult SetupComplete(bool existingPin)
+    {
+      return View(existingPin);
     }
     
     #region Helpers
