@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>@ViewBag.Title - My ASP.NET MVC Application</title>
+  <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+  <meta name="viewport" content="width=device-width" />
+  @Styles.Render("~/Content/css", "~/bundles/bootstrap")
+  @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+  <!--  <header>
+    <div class="content-wrapper">
+      <div class="float-left">
+        <p class="site-title">@Html.ActionLink("your logo here", "Index", "Home")</p>
+      </div>
+      <div class="float-right">
+        <section id="login">
+          @Html.Partial("_LoginPartial")
+        </section>
+        <nav>
+          <ul id="menu">
+            <li>@Html.ActionLink("Home", "Index", "Home")</li>
+            <li>@Html.ActionLink("About", "About", "Home")</li>
+            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>-->
+    <div class="navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="#">Refugees United - IVR Platform</a>
+      <ul class="nav">
+        <li class="active"><a href="@Url.Action("Index", "Designer")">Designer</a></li>
+      </ul>
+    </div>
+  </div>
+
+  @RenderBody()
+
+
+  @Scripts.Render("~/bundles/jquery", "~/bundles/jslibs")
+  @RenderSection("scripts", required: false)
+</body>
+</html>
