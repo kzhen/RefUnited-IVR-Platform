@@ -1,0 +1,30 @@
+﻿@model RefugeesUnitedApi.ApiEntities.Profile
+
+@{
+  ViewBag.Title = "Setup PIN Access";
+}
+
+<h2>Setup PIN Access</h2>
+
+@using (Html.BeginForm("SetupPINAccess", "Account", FormMethod.Post, new { }))
+{
+  @Html.AntiForgeryToken()
+  @Html.HiddenFor(m => m.ProfileId)
+  @Html.HiddenFor(m => m.DialCode)
+  @Html.HiddenFor(m => m.CellPhoneNumber)
+
+  <table class="table table-bordered">
+    <tr>
+      <td>Cell Phone</td>
+      <td>@Model.DialCode @Model.CellPhoneNumber</td>
+    </tr>
+    <tr>
+      <td>PIN Number</td>
+      <td>@Html.Password("PIN")</td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <button type="submit" class="btn">Create PIN</button></td>
+    </tr>
+  </table>
+}

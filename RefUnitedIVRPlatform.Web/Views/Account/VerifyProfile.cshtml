@@ -1,0 +1,44 @@
+﻿@model RefugeesUnitedApi.ApiEntities.Profile
+
+@{
+  ViewBag.Title = "Step2";
+}
+
+<h2>Verify your profile</h2>
+
+@using (Html.BeginForm("VerifyProfile", "Account", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+  @Html.AntiForgeryToken()
+  @Html.HiddenFor(m => m.ProfileId)
+  @Html.HiddenFor(m => m.Email)
+  
+  <div class="control-group">
+    <label class="control-label" for="inputFirstName">First Name</label>
+    <div class="controls">
+      @Html.TextBoxFor(m => m.FirstName, new { id = "inputFirstName" })
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputSurname">Surname</label>
+    <div class="controls">
+      @Html.TextBoxFor(m => m.Surname, new { id = "inputSurname" })
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputCountryCode">Country Code</label>
+    <div class="controls">
+      @Html.TextBoxFor(m => m.DialCode, new { id = "inputCountryCode" })
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputPhoneNumber">PhoneNumber</label>
+    <div class="controls">
+      @Html.TextBoxFor(m => m.CellPhoneNumber, new { id = "inputPhoneNumber" })
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <button type="submit" class="btn">Verify Details</button>
+    </div>
+  </div>
+}

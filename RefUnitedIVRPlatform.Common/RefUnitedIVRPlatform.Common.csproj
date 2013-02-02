@@ -46,7 +46,12 @@
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\refunited-dotnet-client\RefugeesUnitedApi\RefugeesUnitedApi.csproj">
+      <Project>{e6ef07c8-901e-407c-949f-d08fbb40b78b}</Project>
+      <Name>RefugeesUnitedApi</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

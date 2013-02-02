@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RefugeesUnitedApi;
 using RefUnitedIVRPlatform.Common.Interfaces;
+using RefugeesUnitedApi.ApiEntities;
 
 namespace RefUnitedIVRPlatform.Data.Managers
 {
@@ -14,18 +15,41 @@ namespace RefUnitedIVRPlatform.Data.Managers
     {
     };
 
-    public bool ValidateLogin(string username, string password)
+    public ProfileLoginResult ValidateLogin(string username, string password)
     {
       ApiRequest request = new ApiRequest(apiRequestSettings);
 
       var loginRequest = request.ProfileLogin(username, password);
 
-      if (loginRequest == null)
-      {
-        return false;
-      }
+      return loginRequest;
+    }
 
-      return loginRequest.Authenticated;
+
+    public Profile GetProfile(int profileId)
+    {
+      ApiRequest request = new ApiRequest(apiRequestSettings);
+
+      var profile = request.GetProfile(profileId);
+
+      return profile;
+    }
+
+
+    public void UpdateProfile(Profile profile)
+    {
+      ApiRequest request = new ApiRequest(apiRequestSettings);
+
+      request.UpdateProfile(profile);
+    }
+
+
+    public int GetUnreadMessageCount(int profileId)
+    {
+      ApiRequest request = new ApiRequest(apiRequestSettings);
+
+      var result = request.GetUnreadMessages(profileId);
+
+      return result.UnreadMessages;
     }
   }
 }

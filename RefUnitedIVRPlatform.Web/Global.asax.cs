@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Autofac;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -6,6 +7,10 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Autofac.Integration.Mvc;
+using RefUnitedIVRPlatform.Common.Interfaces;
+using RefUnitedIVRPlatform.Data.Managers;
+using Autofac.Integration.WebApi;
 
 namespace RefUnitedIVRPlatform.Web
 {
@@ -14,8 +19,28 @@ namespace RefUnitedIVRPlatform.Web
 
   public class MvcApplication : System.Web.HttpApplication
   {
+    private IContainer BuildMVCContainer()
+    {
+      var builder = new ContainerBuilder();
+
+      builder.Register<IProfileManager>(m => new ProfileManager()).SingleInstance();
+      builder.Register<IRefugeesUnitedAccountManager>(m => new RefugeesUnitedAccountManager());
+
+      builder.RegisterControllers(typeof(MvcApplication).Assembly);
+      builder.RegisterApiControllers(typeof(MvcApplication).Assembly);
+
+
+      return builder.Build();
+    }
+
     protected void Application_Start()
     {
+      var container = BuildMVCContainer();
+      DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+
+      var resolver = new AutofacWebApiDependencyResolver(container);
+      GlobalConfiguration.Configuration.DependencyResolver = resolver;
+
       AreaRegistration.RegisterAllAreas();
 
       WebApiConfig.Register(GlobalConfiguration.Configuration);

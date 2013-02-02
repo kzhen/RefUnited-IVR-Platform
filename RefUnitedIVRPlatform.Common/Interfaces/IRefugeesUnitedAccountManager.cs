@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RefugeesUnitedApi.ApiEntities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,9 @@ namespace RefUnitedIVRPlatform.Common.Interfaces
 {
   public interface IRefugeesUnitedAccountManager
   {
-    bool ValidateLogin(string username, string password);
+    ProfileLoginResult ValidateLogin(string username, string password);
+    Profile GetProfile(int profileId);
+    void UpdateProfile(Profile profile);
+    int GetUnreadMessageCount(int profileId);
   }
 }
