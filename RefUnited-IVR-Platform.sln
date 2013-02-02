@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefUnitedIVRPlatform.Data",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefUnitedIVRPlatform.Common", "RefUnitedIVRPlatform.Common\RefUnitedIVRPlatform.Common.csproj", "{138ECE08-5A78-409F-9F21-25B3E18B679D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefugeesUnitedApi", "..\refunited-dotnet-client\RefugeesUnitedApi\RefugeesUnitedApi.csproj", "{E6EF07C8-901E-407C-949F-D08FBB40B78B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{138ECE08-5A78-409F-9F21-25B3E18B679D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{138ECE08-5A78-409F-9F21-25B3E18B679D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{138ECE08-5A78-409F-9F21-25B3E18B679D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6EF07C8-901E-407C-949F-D08FBB40B78B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6EF07C8-901E-407C-949F-D08FBB40B78B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6EF07C8-901E-407C-949F-D08FBB40B78B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6EF07C8-901E-407C-949F-D08FBB40B78B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
