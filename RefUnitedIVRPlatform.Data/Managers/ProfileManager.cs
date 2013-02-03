@@ -1,4 +1,5 @@
-﻿using RefUnitedIVRPlatform.Common.Interfaces;
+﻿using RefUnitedIVRPlatform.Common.Entities;
+using RefUnitedIVRPlatform.Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +13,15 @@ namespace RefUnitedIVRPlatform.Data.Managers
     private Dictionary<string, string> pins;
     private Dictionary<string, int> profileIds;
     private List<String> urls;
+    private List<Recording> recordings;
 
     public ProfileManager()
     {
       pins = new Dictionary<string, string>();
       profileIds = new Dictionary<string, int>();
       urls = new List<string>();
+
+      recordings = new List<Recording>();
     }
 
     public bool CreatePin(string phoneNumber, string pin, int profileId)
@@ -77,9 +81,32 @@ namespace RefUnitedIVRPlatform.Data.Managers
     }
 
 
-    public List<string> GetRecordings()
+    public List<string> GetRecordingUrls()
     {
       return this.urls;
+    }
+
+
+    public void SaveRecording(int profileId, int targetProfileId, string url)
+    {
+      Recording recording = new Recording()
+      {
+        FromProfileId = profileId,
+        ToProfileId = targetProfileId,
+        Url = url
+      };
+
+      recordings.Add(recording);
+    }
+
+    public List<Recording> GetRecordings()
+    {
+      return this.recordings;
+    }
+
+    public List<Recording> GetRecordings(int profileId)
+    {
+      return this.recordings.Where(m => m.ToProfileId == profileId).ToList();
     }
   }
 }

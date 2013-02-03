@@ -21,22 +21,6 @@ namespace RefUnitedIVRPlatform.Web.Controllers
       this.profileManager = profileManager;
     }
 
-    public HttpResponseMessage Get()
-    {
-      string xml = "";
-
-      if (profileManager != null)
-      {
-        xml = "<profileManager>alive, we have an instance wtf!?</profileManager>";
-      }
-      else
-      {
-        xml = "<profileManager>NULL</profileManager>";
-      }
-
-      return this.Request.CreateResponse(HttpStatusCode.OK, xml, new XmlMediaTypeFormatter());
-    }
-
     public HttpResponseMessage Post(VoiceRequest request)
     {
       var response = new TwilioResponse();
@@ -65,8 +49,9 @@ namespace RefUnitedIVRPlatform.Web.Controllers
         }
         else
         {
-          response.Say("Please enter your pin, followed by pound.");
-          response.Gather(new { finishOnKey = "#", action = "/api/IVRAuthenticate" });
+          response.BeginGather(new { finishOnKey = "#", action = "/api/IVRAuthenticate" });
+          response.Say("Please enter your pin, followed by hash.");
+          response.EndGather();
         }
       }
       catch (Exception ex)
@@ -74,7 +59,7 @@ namespace RefUnitedIVRPlatform.Web.Controllers
         response.Say("an error has occured: " + ex.Message);
         response.Say("an error has occured: " + ex.Message);
         response.Say("an error has occured: " + ex.Message);
-        response.Hangup();        
+        response.Hangup();
       }
 
       return this.Request.CreateResponse(HttpStatusCode.OK, response.Element, new XmlMediaTypeFormatter());

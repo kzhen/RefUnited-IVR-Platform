@@ -24,7 +24,6 @@ namespace RefUnitedIVRPlatform.Data.Managers
       return loginRequest;
     }
 
-
     public Profile GetProfile(int profileId)
     {
       ApiRequest request = new ApiRequest(apiRequestSettings);
@@ -34,14 +33,12 @@ namespace RefUnitedIVRPlatform.Data.Managers
       return profile;
     }
 
-
     public void UpdateProfile(Profile profile)
     {
       ApiRequest request = new ApiRequest(apiRequestSettings);
 
       request.UpdateProfile(profile);
     }
-
 
     public int GetUnreadMessageCount(int profileId)
     {
@@ -50,6 +47,15 @@ namespace RefUnitedIVRPlatform.Data.Managers
       var result = request.GetUnreadMessages(profileId);
 
       return result.UnreadMessages;
+    }
+
+    public List<Profile> GetFavourites(int profileId)
+    {
+      ApiRequest request = new ApiRequest(apiRequestSettings);
+
+      var results = request.GetFavourites(profileId);
+
+      return results;
     }
   }
 }

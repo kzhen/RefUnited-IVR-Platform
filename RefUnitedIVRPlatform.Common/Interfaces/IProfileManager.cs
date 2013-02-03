@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RefUnitedIVRPlatform.Common.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,9 @@ namespace RefUnitedIVRPlatform.Common.Interfaces
     string GetPin(string lookupPhoneNumber);
     int GetProfileId(string lookupPhoneNumber);
     void SaveRecording(string url);
-
-    List<string> GetRecordings();
+    List<string> GetRecordingUrls();
+    List<Recording> GetRecordings();
+    List<Recording> GetRecordings(int profileId);
+    void SaveRecording(int profileId, int targetProfileId, string url);
   }
 }

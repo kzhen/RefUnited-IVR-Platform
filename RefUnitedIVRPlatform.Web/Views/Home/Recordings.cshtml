@@ -1,4 +1,4 @@
-﻿@model List<string>
+﻿@model List<RefUnitedIVRPlatform.Common.Entities.Recording>
 
 @{
     ViewBag.Title = "Recordings";
@@ -6,9 +6,18 @@
 
 <h2>Recordings</h2>
 
-<ul>
+<table class="table table-bordered">
+  <tr>
+    <td>From</td>
+    <td>To</td>
+    <td>Url</td>
+  </tr>
 @foreach (var rec in Model)
 {
-  <li>@rec</li>
+  <tr>
+    <td>@rec.FromProfileId</td>
+    <td>@rec.ToProfileId</td>
+    <td>@rec.Url</td>
+  </tr>
 }
-</ul>
+</table>
