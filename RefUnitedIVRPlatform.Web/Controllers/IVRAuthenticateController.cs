@@ -43,12 +43,7 @@ namespace RefUnitedIVRPlatform.Web.Controllers
 
         if (result)
         {
-          response.Say("Main menu.");
-          response.Say("Press one to check messages.");
-          response.Say("Press two to listen to old messages.");
-          response.Say("Press three to record a test message.");
-          response.Say("Press four to listen to recorded messages.");
-          response.Gather(new { numDigits = 1, action = "/IVRMain/MainMenu" });
+          response.Redirect("/IVRMain/MainMenu", "POST");
         }
         else
         {
