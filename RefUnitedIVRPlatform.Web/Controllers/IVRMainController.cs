@@ -154,7 +154,7 @@ namespace RefUnitedIVRPlatform.Web.Controllers
 
       favourites.ForEach(x =>
         {
-          sb.Append(x.Id);
+          sb.Append(x.ProfileId);
           sb.Append(",");
         });
 
