@@ -12,6 +12,7 @@ namespace RefUnitedIVRPlatform.Data.Managers
   {
     private Dictionary<string, string> pins;
     private Dictionary<string, int> profileIds;
+    private Dictionary<string, string> profileCultures;
     private List<String> urls;
     private List<Recording> recordings;
 
@@ -20,6 +21,7 @@ namespace RefUnitedIVRPlatform.Data.Managers
       pins = new Dictionary<string, string>();
       profileIds = new Dictionary<string, int>();
       urls = new List<string>();
+      profileCultures = new Dictionary<string, string>();
 
       recordings = new List<Recording>();
     }
@@ -107,6 +109,21 @@ namespace RefUnitedIVRPlatform.Data.Managers
     public List<Recording> GetRecordings(int profileId)
     {
       return this.recordings.Where(m => m.ToProfileId == profileId).ToList();
+    }
+
+
+    public string GetCulture(string lookupPhoneNumber)
+    {
+      if (profileCultures.ContainsKey(lookupPhoneNumber))
+        return profileCultures[lookupPhoneNumber];
+
+      return null;
+    }
+
+
+    public void SetLanguage(string phoneNumber, string language)
+    {
+      profileCultures[phoneNumber] = language;
     }
   }
 }

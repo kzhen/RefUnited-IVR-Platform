@@ -95,10 +95,13 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     {
       int profileId = int.Parse(form["profileId"]);
       string pin = form["PIN"];
+      string language = form["Language"];
 
       string phoneNumber = string.Format("{0}{1}", form["DialCode"], form["CellPhoneNumber"]);
 
       var result = profileManager.CreatePin(phoneNumber, pin, profileId);
+
+      profileManager.SetLanguage(phoneNumber, language);
 
       return RedirectToAction("SetupComplete", new { existingPin = result });
     }

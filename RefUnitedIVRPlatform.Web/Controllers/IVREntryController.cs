@@ -14,53 +14,16 @@ namespace RefUnitedIVRPlatform.Web.Controllers
 {
   public class IVREntryController : ApiController
   {
-    private IProfileManager profileManager;
+    private IIVREntryLogic ivrEntryLogic;
 
-    public IVREntryController(IProfileManager profileManager)
+    public IVREntryController(IIVREntryLogic ivrEntryLogic)
     {
-      this.profileManager = profileManager;
+      this.ivrEntryLogic = ivrEntryLogic;
     }
 
     public HttpResponseMessage Post(VoiceRequest request)
     {
-      var response = new TwilioResponse();
-
-      response.Say("Welcome to Refugees United.");
-
-      string lookupPhoneNumber = string.Empty;
-
-      if (request.Direction.Equals("inbound"))
-      {
-        lookupPhoneNumber = request.From;
-      }
-      else if (request.Direction.Equals("outbound-api"))
-      {
-        lookupPhoneNumber = request.To;
-      }
-
-      response.Say("we are looking up phone number " + string.Join(" ", lookupPhoneNumber.ToArray()));
-
-      try
-      {
-        if (!profileManager.CheckNumber(lookupPhoneNumber))
-        {
-          response.Say("Sorry! That number isn't recognized. Please register via the web platform.");
-          response.Hangup();
-        }
-        else
-        {
-          response.BeginGather(new { finishOnKey = "#", action = "/api/IVRAuthenticate" });
-          response.Say("Please enter your pin, followed by hash.");
-          response.EndGather();
-        }
-      }
-      catch (Exception ex)
-      {
-        response.Say("an error has occured: " + ex.Message);
-        response.Say("an error has occured: " + ex.Message);
-        response.Say("an error has occured: " + ex.Message);
-        response.Hangup();
-      }
+      var response = ivrEntryLogic.GetGreeting(request);
 
       return this.Request.CreateResponse(HttpStatusCode.OK, response.Element, new XmlMediaTypeFormatter());
     }

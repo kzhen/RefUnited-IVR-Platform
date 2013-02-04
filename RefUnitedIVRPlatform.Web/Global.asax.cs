@@ -11,6 +11,7 @@ using Autofac.Integration.Mvc;
 using RefUnitedIVRPlatform.Common.Interfaces;
 using RefUnitedIVRPlatform.Data.Managers;
 using Autofac.Integration.WebApi;
+using RefUnitedIVRPlatform.Business;
 
 namespace RefUnitedIVRPlatform.Web
 {
@@ -24,7 +25,8 @@ namespace RefUnitedIVRPlatform.Web
       var builder = new ContainerBuilder();
 
       builder.Register<IProfileManager>(m => new ProfileManager()).SingleInstance();
-      builder.Register<IRefugeesUnitedAccountManager>(m => new RefugeesUnitedAccountManager());
+      builder.Register<IRefugeesUnitedAccountManager>(m => new RefugeesUnitedAccountManager()).InstancePerHttpRequest();
+      builder.Register<IIVREntryLogic>(m => new IVREntryLogic(m.Resolve<IProfileManager>())).InstancePerHttpRequest();
 
       builder.RegisterControllers(typeof(MvcApplication).Assembly);
       builder.RegisterApiControllers(typeof(MvcApplication).Assembly);

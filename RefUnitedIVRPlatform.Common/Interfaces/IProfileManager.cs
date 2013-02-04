@@ -19,5 +19,7 @@ namespace RefUnitedIVRPlatform.Common.Interfaces
     List<Recording> GetRecordings();
     List<Recording> GetRecordings(int profileId);
     void SaveRecording(int profileId, int targetProfileId, string url);
+    string GetCulture(string lookupPhoneNumber);
+    void SetLanguage(string phoneNumber, string language);
   }
 }

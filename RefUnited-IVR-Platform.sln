@@ -16,6 +16,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{174577
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefUnitedIVRPlatform.Business", "RefUnitedIVRPlatform.Business\RefUnitedIVRPlatform.Business.csproj", "{2AE47113-76D3-4EB7-ADB4-E7B8EDE3EBE5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefUnitedIVRPlatform.Resources", "RefUnitedIVRPlatform.Resources\RefUnitedIVRPlatform.Resources.csproj", "{0EDF838E-8EE3-4418-BB73-CB9658F75D37}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +42,14 @@ Global
 		{E6EF07C8-901E-407C-949F-D08FBB40B78B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6EF07C8-901E-407C-949F-D08FBB40B78B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6EF07C8-901E-407C-949F-D08FBB40B78B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AE47113-76D3-4EB7-ADB4-E7B8EDE3EBE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AE47113-76D3-4EB7-ADB4-E7B8EDE3EBE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AE47113-76D3-4EB7-ADB4-E7B8EDE3EBE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AE47113-76D3-4EB7-ADB4-E7B8EDE3EBE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EDF838E-8EE3-4418-BB73-CB9658F75D37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EDF838E-8EE3-4418-BB73-CB9658F75D37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EDF838E-8EE3-4418-BB73-CB9658F75D37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EDF838E-8EE3-4418-BB73-CB9658F75D37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

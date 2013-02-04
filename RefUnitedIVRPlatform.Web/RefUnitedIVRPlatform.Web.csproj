@@ -298,6 +298,10 @@
       <Project>{e6ef07c8-901e-407c-949f-d08fbb40b78b}</Project>
       <Name>RefugeesUnitedApi</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RefUnitedIVRPlatform.Business\RefUnitedIVRPlatform.Business.csproj">
+      <Project>{2ae47113-76d3-4eb7-adb4-e7b8ede3ebe5}</Project>
+      <Name>RefUnitedIVRPlatform.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RefUnitedIVRPlatform.Common\RefUnitedIVRPlatform.Common.csproj">
       <Project>{138ece08-5a78-409f-9f21-25b3e18b679d}</Project>
       <Name>RefUnitedIVRPlatform.Common</Name>
