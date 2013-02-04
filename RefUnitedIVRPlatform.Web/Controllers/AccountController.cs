@@ -36,8 +36,20 @@ namespace RefUnitedIVRPlatform.Web.Controllers
 
     public ActionResult Info(string phoneNumber)
     {
+      int profileId;
+
+      try
+      {
+        profileId = profileManager.GetProfileId(phoneNumber);
+      }
+      catch (Exception)
+      {
+        ViewBag.PhoneNumber = phoneNumber;
+        return View("AccountNotFound");
+      }
+
       IVRProfileViewModel model = new IVRProfileViewModel();
-      model.ProfileId = profileManager.GetProfileId(phoneNumber);
+      model.ProfileId = profileId;
       model.Recordings = profileManager.GetRecordings(model.ProfileId);
       model.PIN = profileManager.GetPin(phoneNumber);
       model.PhoneNumber = phoneNumber;

@@ -67,6 +67,11 @@ namespace RefUnitedIVRPlatform.Data.Managers
 
     public int GetProfileId(string lookupPhoneNumber)
     {
+      if (string.IsNullOrEmpty(lookupPhoneNumber))
+      {
+        throw new ArgumentNullException("lookupPhoneNumber");
+      }
+
       if (profileIds.ContainsKey(lookupPhoneNumber))
       {
         return profileIds[lookupPhoneNumber];
