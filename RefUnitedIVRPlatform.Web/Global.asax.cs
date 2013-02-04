@@ -9,9 +9,9 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Autofac.Integration.Mvc;
 using RefUnitedIVRPlatform.Common.Interfaces;
-using RefUnitedIVRPlatform.Data.Managers;
 using Autofac.Integration.WebApi;
 using RefUnitedIVRPlatform.Business;
+using RefUnitedIVRPlatform.Business.Managers;
 
 namespace RefUnitedIVRPlatform.Web
 {
@@ -30,7 +30,6 @@ namespace RefUnitedIVRPlatform.Web
 
       builder.RegisterControllers(typeof(MvcApplication).Assembly);
       builder.RegisterApiControllers(typeof(MvcApplication).Assembly);
-
 
       return builder.Build();
     }

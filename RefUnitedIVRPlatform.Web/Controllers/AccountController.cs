@@ -11,7 +11,6 @@ using WebMatrix.WebData;
 using RefUnitedIVRPlatform.Web.Filters;
 using RefUnitedIVRPlatform.Web.Models;
 using RefUnitedIVRPlatform.Common.Interfaces;
-using RefUnitedIVRPlatform.Data.Managers;
 using RefUnitedIVRPlatform.Common.Entities;
 
 namespace RefUnitedIVRPlatform.Web.Controllers

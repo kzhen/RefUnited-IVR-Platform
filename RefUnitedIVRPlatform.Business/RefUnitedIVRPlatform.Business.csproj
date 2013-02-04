@@ -58,6 +58,8 @@
   <ItemGroup>
     <Compile Include="IVREntryLogic.cs" />
     <Compile Include="LanguageHelper.cs" />
+    <Compile Include="Managers\ProfileManager.cs" />
+    <Compile Include="Managers\RefugeesUnitedAccountManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

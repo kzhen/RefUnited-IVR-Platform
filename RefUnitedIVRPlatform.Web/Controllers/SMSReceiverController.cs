@@ -19,6 +19,8 @@ namespace RefUnitedIVRPlatform.Web.Controllers
 
       public HttpResponseMessage Get(SmsRequest request)
       {
+        var response = new TwilioResponse();
+
         try
         {
           string outboundPhoneNumber = "+447903467912";
@@ -29,8 +31,6 @@ namespace RefUnitedIVRPlatform.Web.Controllers
             twilioPhoneNumber,
             outboundPhoneNumber,
             "http://refuniteivr.azurewebsites.net/api/IVREntry");
-
-          var response = new TwilioResponse();
 
           if (call.RestException == null)
           {
@@ -45,7 +45,8 @@ namespace RefUnitedIVRPlatform.Web.Controllers
         }
         catch (Exception ex)
         {
-          throw new Exception("there was a problem " + ex.Message, ex);
+          response.Sms("exception: " + ex.Message);
+          return this.Request.CreateResponse(HttpStatusCode.OK, response.Element, new XmlMediaTypeFormatter());
         }
       }
     }

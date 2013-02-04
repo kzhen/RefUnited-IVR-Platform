@@ -7,7 +7,7 @@ using RefugeesUnitedApi;
 using RefUnitedIVRPlatform.Common.Interfaces;
 using RefugeesUnitedApi.ApiEntities;
 
-namespace RefUnitedIVRPlatform.Data.Managers
+namespace RefUnitedIVRPlatform.Business.Managers
 {
   public class RefugeesUnitedAccountManager : IRefugeesUnitedAccountManager
   {
