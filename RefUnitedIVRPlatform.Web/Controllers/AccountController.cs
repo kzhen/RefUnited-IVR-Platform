@@ -34,6 +34,18 @@ namespace RefUnitedIVRPlatform.Web.Controllers
       return View();
     }
 
+    public ActionResult Info(string phoneNumber)
+    {
+      IVRProfileViewModel model = new IVRProfileViewModel();
+      model.ProfileId = profileManager.GetProfileId(phoneNumber);
+      model.Recordings = profileManager.GetRecordings(model.ProfileId);
+      model.PIN = profileManager.GetPin(phoneNumber);
+      model.PhoneNumber = phoneNumber;
+      model.Culture = profileManager.GetCulture(phoneNumber);
+
+      return View(model);
+    }
+
     [HttpPost]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
