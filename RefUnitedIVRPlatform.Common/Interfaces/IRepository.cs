@@ -12,6 +12,6 @@ namespace RefUnitedIVRPlatform.Common.Interfaces
     T Create(T item);
     bool Delete(T item);
     List<T> GetAll();
-    void Update(T profile);
+    T Update(T profile);
   }
 }

@@ -36,6 +36,12 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     public ActionResult Info(string phoneNumber)
     {
       var model = profileManager.GetProfileByPhoneNumber(phoneNumber);
+
+      if (model == null)
+      {
+        return View("AccountNotFound");
+      }
+
       return View(model);
     }
 
@@ -106,11 +112,11 @@ namespace RefUnitedIVRPlatform.Web.Controllers
       return RedirectToAction("SetupComplete");
     }
 
-    public ActionResult SetupComplete(bool existingPin)
+    public ActionResult SetupComplete()
     {
-      return View(existingPin);
+      return View();
     }
-    
+
     #region Helpers
     private ActionResult RedirectToLocal(string returnUrl)
     {
