@@ -54,16 +54,6 @@ namespace RefUnitedIVRPlatform.Web.Controllers
       return View(model);
     }
 
-    //
-    // POST: /Account/LogOff
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public ActionResult LogOff()
-    {
-      return RedirectToAction("Index", "Home");
-    }
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public ActionResult VerifyProfile(RefugeesUnitedApi.ApiEntities.Profile profile)
