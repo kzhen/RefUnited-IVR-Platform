@@ -8,29 +8,35 @@ using RefUnitedIVRPlatform.Common.Entities;
 
 namespace RefUnitedIVRPlatform.Data.Repositories
 {
-  public class ProfileRepository : IProfileRepository
+  public class ProfileRepositoryInMemory : IProfileRepository
   {
-    public ProfileRepository()
-    {
 
-    }
-
-    public Profile Get(int id)
+    public IVRProfile GetByPhoneNumber(string lookupPhoneNumber)
     {
       throw new NotImplementedException();
     }
 
-    public Profile Create(Profile item)
+    public IVRProfile Get(int id)
     {
       throw new NotImplementedException();
     }
 
-    public bool Delete(Profile item)
+    public IVRProfile Create(IVRProfile item)
     {
       throw new NotImplementedException();
     }
 
-    public List<Profile> GetAll()
+    public bool Delete(IVRProfile item)
+    {
+      throw new NotImplementedException();
+    }
+
+    public List<IVRProfile> GetAll()
+    {
+      throw new NotImplementedException();
+    }
+
+    public void Update(IVRProfile profile)
     {
       throw new NotImplementedException();
     }

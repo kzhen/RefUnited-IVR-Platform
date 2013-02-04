@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\IVRProfile.cs" />
     <Compile Include="Entities\Profile.cs" />
     <Compile Include="Entities\Recording.cs" />
     <Compile Include="Interfaces\IIVREntryLogic.cs" />

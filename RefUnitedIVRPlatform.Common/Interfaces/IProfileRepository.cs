@@ -7,7 +7,8 @@ using RefUnitedIVRPlatform.Common.Entities;
 
 namespace RefUnitedIVRPlatform.Common.Interfaces
 {
-  public interface IProfileRepository : IRepository<Profile>
+  public interface IProfileRepository : IRepository<IVRProfile>
   {
+    IVRProfile GetByPhoneNumber(string lookupPhoneNumber);
   }
 }

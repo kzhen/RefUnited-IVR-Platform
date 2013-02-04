@@ -35,25 +35,7 @@ namespace RefUnitedIVRPlatform.Web.Controllers
 
     public ActionResult Info(string phoneNumber)
     {
-      int profileId;
-
-      try
-      {
-        profileId = profileManager.GetProfileId(phoneNumber);
-      }
-      catch (Exception)
-      {
-        ViewBag.PhoneNumber = phoneNumber;
-        return View("AccountNotFound");
-      }
-
-      IVRProfileViewModel model = new IVRProfileViewModel();
-      model.ProfileId = profileId;
-      model.Recordings = profileManager.GetRecordings(model.ProfileId);
-      model.PIN = profileManager.GetPin(phoneNumber);
-      model.PhoneNumber = phoneNumber;
-      model.Culture = profileManager.GetCulture(phoneNumber);
-
+      var model = profileManager.GetProfileByPhoneNumber(phoneNumber);
       return View(model);
     }
 
@@ -109,14 +91,19 @@ namespace RefUnitedIVRPlatform.Web.Controllers
       int profileId = int.Parse(form["profileId"]);
       string pin = form["PIN"];
       string language = form["Language"];
-
       string phoneNumber = string.Format("{0}{1}", form["DialCode"], form["CellPhoneNumber"]);
 
-      var result = profileManager.CreatePin(phoneNumber, pin, profileId);
+      var ivrProfile = new IVRProfile()
+      {
+        ProfileId = profileId,
+        PIN = pin,
+        Culture = language,
+        PhoneNumber = phoneNumber
+      };
 
-      profileManager.SetLanguage(phoneNumber, language);
+      profileManager.CreateProfile(ivrProfile);
 
-      return RedirectToAction("SetupComplete", new { existingPin = result });
+      return RedirectToAction("SetupComplete");
     }
 
     public ActionResult SetupComplete(bool existingPin)

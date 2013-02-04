@@ -10,76 +10,71 @@ namespace RefUnitedIVRPlatform.Business.Managers
 {
   public class ProfileManager : IProfileManager
   {
-    private Dictionary<string, string> pins;
-    private Dictionary<string, int> profileIds;
-    private Dictionary<string, string> profileCultures;
     private List<String> urls;
     private List<Recording> recordings;
+    private IProfileRepository profileRepository;
 
-    public ProfileManager()
+    public ProfileManager(IProfileRepository repository)
     {
-      pins = new Dictionary<string, string>();
-      profileIds = new Dictionary<string, int>();
       urls = new List<string>();
-      profileCultures = new Dictionary<string, string>();
-
       recordings = new List<Recording>();
+      this.profileRepository = repository;
     }
 
-    public bool CreatePin(string phoneNumber, string pin, int profileId)
+    public void CreateProfile(IVRProfile profile)
     {
-      profileIds[phoneNumber] = profileId;
-
-      if (pins.ContainsKey(phoneNumber))
-      {
-        pins[phoneNumber] = pin;
-        return true;
-      }
-
-      pins[phoneNumber] = pin;
-      return false;
+      profileRepository.Create(profile);
     }
 
+    public IVRProfile GetProfile(int profileId)
+    {
+      return profileRepository.Get(profileId);
+    }
+
+    public void UpdateProfile(IVRProfile profile)
+    {
+      profileRepository.Update(profile);
+    }
 
     public bool CheckNumber(string lookupPhoneNumber)
     {
-      return pins.ContainsKey(lookupPhoneNumber);
+      try
+      {
+        var profile = profileRepository.GetByPhoneNumber(lookupPhoneNumber);
+        if (profile != null)
+        {
+          return true;
+        }
+        else
+        {
+          return false;
+        }
+      }
+      catch (Exception)
+      {
+        return false;
+      }
     }
 
     public bool CheckPin(string lookupPhoneNumber, string pin)
     {
-      if (pins.ContainsKey(lookupPhoneNumber))
-      {
-        if (pins[lookupPhoneNumber].Equals(pin))
-        {
-          return true;
-        }
-      }
-      return false;
-    }
+      var profile = profileRepository.GetByPhoneNumber(lookupPhoneNumber);
 
+      return profile.PIN.Equals(pin, StringComparison.OrdinalIgnoreCase);
+    }
 
     public string GetPin(string lookupPhoneNumber)
     {
-      return pins[lookupPhoneNumber];
-    }
+      var profile = profileRepository.GetByPhoneNumber(lookupPhoneNumber);
 
+      return profile.PIN;
+    }
 
     public int GetProfileId(string lookupPhoneNumber)
     {
-      if (string.IsNullOrEmpty(lookupPhoneNumber))
-      {
-        throw new ArgumentNullException("lookupPhoneNumber");
-      }
+      var profile = profileRepository.GetByPhoneNumber(lookupPhoneNumber);
 
-      if (profileIds.ContainsKey(lookupPhoneNumber))
-      {
-        return profileIds[lookupPhoneNumber];
-      }
-      else
-      {
-        throw new Exception("ProfileId not found...");
-      }
+      return profile.ProfileId;
     }
 
     public void SaveRecording(string url)
@@ -87,12 +82,10 @@ namespace RefUnitedIVRPlatform.Business.Managers
       urls.Add(url);
     }
 
-
     public List<string> GetRecordingUrls()
     {
       return this.urls;
     }
-
 
     public void SaveRecording(int profileId, int targetProfileId, string url)
     {
@@ -116,19 +109,16 @@ namespace RefUnitedIVRPlatform.Business.Managers
       return this.recordings.Where(m => m.ToProfileId == profileId).ToList();
     }
 
-
     public string GetCulture(string lookupPhoneNumber)
     {
-      if (profileCultures.ContainsKey(lookupPhoneNumber))
-        return profileCultures[lookupPhoneNumber];
+      var profile = profileRepository.GetByPhoneNumber(lookupPhoneNumber);
 
-      return null;
+      return profile.Culture;
     }
 
-
-    public void SetLanguage(string phoneNumber, string language)
+    public IVRProfile GetProfileByPhoneNumber(string phoneNumber)
     {
-      profileCultures[phoneNumber] = language;
+      return profileRepository.GetByPhoneNumber(phoneNumber);
     }
   }
 }

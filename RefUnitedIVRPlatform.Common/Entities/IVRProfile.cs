@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace RefUnitedIVRPlatform.Web.Models
+namespace RefUnitedIVRPlatform.Common.Entities
 {
-  public class IVRProfileViewModel
+  public class IVRProfile
   {
     public int ProfileId { get; set; }
     public string PhoneNumber { get; set; }
@@ -14,7 +14,7 @@ namespace RefUnitedIVRPlatform.Web.Models
     public string Culture { get; set; }
     public List<Recording> Recordings { get; set; }
 
-    public IVRProfileViewModel()
+    public IVRProfile()
     {
       this.Recordings = new List<Recording>();
     }
