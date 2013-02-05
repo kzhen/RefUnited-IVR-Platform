@@ -10,7 +10,7 @@ using System.Web.Routing;
 using Autofac.Integration.Mvc;
 using RefUnitedIVRPlatform.Common.Interfaces;
 using Autofac.Integration.WebApi;
-using RefUnitedIVRPlatform.Business;
+using RefUnitedIVRPlatform.Business.IVRLogic;
 using RefUnitedIVRPlatform.Business.Managers;
 using RefUnitedIVRPlatform.Data.Repositories;
 

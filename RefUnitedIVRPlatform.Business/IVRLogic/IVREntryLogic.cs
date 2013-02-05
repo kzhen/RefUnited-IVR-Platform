@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Twilio.Mvc;
 using Twilio.TwiML;
 
-namespace RefUnitedIVRPlatform.Business
+namespace RefUnitedIVRPlatform.Business.IVRLogic
 {
   public class IVREntryLogic : IIVREntryLogic
   {

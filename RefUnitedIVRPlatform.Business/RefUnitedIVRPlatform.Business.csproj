@@ -56,7 +56,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IVREntryLogic.cs" />
+    <Compile Include="IVRLogic\IVREntryLogic.cs" />
     <Compile Include="LanguageHelper.cs" />
     <Compile Include="Managers\ProfileManager.cs" />
     <Compile Include="Managers\RefugeesUnitedAccountManager.cs" />

@@ -26,7 +26,6 @@ namespace RefUnitedIVRPlatform.Web.Controllers
       this.profileManager = profileManager;
     }
 
-    [AllowAnonymous]
     public ActionResult Login(string returnUrl)
     {
       ViewBag.ReturnUrl = returnUrl;
@@ -46,7 +45,6 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     }
 
     [HttpPost]
-    [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public ActionResult Login(LoginModel model, string returnUrl)
     {
