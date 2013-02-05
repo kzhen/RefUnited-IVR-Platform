@@ -19,6 +19,12 @@ namespace RefUnitedIVRPlatform.Business.Managers
       urls = new List<string>();
       recordings = new List<Recording>();
       this.profileRepository = repository;
+
+      CreateSampleData();
+    }
+
+    private void CreateSampleData()
+    {
     }
 
     public void CreateProfile(IVRProfile profile)
@@ -119,6 +125,14 @@ namespace RefUnitedIVRPlatform.Business.Managers
     public IVRProfile GetProfileByPhoneNumber(string phoneNumber)
     {
       return profileRepository.GetByPhoneNumber(phoneNumber);
+    }
+
+
+    public void DeleteRecording(int profileId, int recordingIdx)
+    {
+      var itemToDelete = recordings.Where(m => m.ToProfileId == profileId).ToList()[recordingIdx];
+
+      recordings.Remove(itemToDelete);
     }
   }
 }

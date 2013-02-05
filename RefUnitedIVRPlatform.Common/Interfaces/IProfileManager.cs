@@ -28,5 +28,7 @@ namespace RefUnitedIVRPlatform.Common.Interfaces
     string GetCulture(string lookupPhoneNumber);
 
     IVRProfile GetProfileByPhoneNumber(string phoneNumber);
+
+    void DeleteRecording(int profileId, int recordingIdx);
   }
 }

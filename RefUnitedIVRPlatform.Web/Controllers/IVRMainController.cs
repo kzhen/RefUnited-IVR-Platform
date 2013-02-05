@@ -1,4 +1,5 @@
-﻿using RefUnitedIVRPlatform.Common.Interfaces;
+﻿using RefUnitedIVRPlatform.Common.Entities;
+using RefUnitedIVRPlatform.Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,7 +80,7 @@ namespace RefUnitedIVRPlatform.Web.Controllers
             response.Say("Looking up old messages");
             break;
           case 4:
-            response.Redirect(string.Format("/IVRMain/PlayRecordedMessages?profileId={0}", profileId));
+            response.Redirect(string.Format("/IVRMain/PlayRecordedMessage?profileId={0}", profileId));
             break;
           case 8:
             response.Say("Time to record something, press any key when you are done.", new { voice = "woman" });
@@ -213,6 +214,98 @@ namespace RefUnitedIVRPlatform.Web.Controllers
       response.Say("Thank you. Your message has been saved.");
 
       response.Redirect("/IVRMain/MainMenu");
+
+      Response.ContentType = "text/xml";
+      return Content(response.Element.ToString());
+    }
+
+    [HttpPost]
+    public ActionResult PlayRecordedMessage(VoiceRequest request, int profileId, int? recordingIdx)
+    {
+      var response = new TwilioResponse();
+
+      var voiceMessages = profileManager.GetRecordings(profileId);
+
+      if (voiceMessages == null || voiceMessages.Count == 0)
+      {
+        response.Say("You have no voice messages");
+        response.Redirect("/IVRMain/MainMenu");
+        Response.ContentType = "text/xml";
+        return Content(response.Element.ToString());
+      }
+
+      if (recordingIdx.HasValue && recordingIdx.Value >= voiceMessages.Count)
+      {
+        response.Say("No more messages.");
+        response.Redirect("/IVRMain/MainMenu");
+        Response.ContentType = "text/xml";
+        return Content(response.Element.ToString());
+      }
+
+      Recording voiceMessage;
+
+      if (recordingIdx.HasValue)
+      {
+        voiceMessage = voiceMessages[recordingIdx.Value];
+      }
+      else
+      {
+        recordingIdx = 0;
+        voiceMessage = voiceMessages[recordingIdx.Value];
+      }
+
+      response.Play(voiceMessage.Url);
+
+      response.BeginGather(new { numDigits = 1, action = string.Format("/IVRMain/PlayRecordedMessage_Response?profileId={0}&recordingIdx={1}&fromProfileId={2}", profileId, recordingIdx.Value, voiceMessage.FromProfileId) });
+      response.Say("Press one to repeat this message");
+      response.Say("Press two to delete this message");
+      response.Say("Press three to reply to this message");
+      response.Say("Press four to go to the next message");
+      response.EndGather();
+
+      Response.ContentType = "text/xml";
+      return Content(response.Element.ToString());
+    }
+
+    [HttpPost]
+    public ActionResult PlayRecordedMessage_Response(VoiceRequest request, int profileId, int recordingIdx, int fromProfileId)
+    {
+      var response = new TwilioResponse();
+
+      var digits = int.Parse(request.Digits);
+
+      switch (digits)
+      {
+        case 1:
+          response.Redirect(string.Format("/IVRMain/PlayRecordedMessage?profileId={0}&recordingIdx={1}", profileId, recordingIdx));
+          break;
+        case 2:
+          profileManager.DeleteRecording(profileId, recordingIdx);
+          response.Redirect(string.Format("/IVRMain/PlayRecordedMessage?profileId={0}&recordingIdx={1}", profileId, recordingIdx));
+          break;
+        case 3:
+          response.Say("At the tone please record your response. Press any key when you are done.");
+          response.Record(new { action = string.Format("/IVRMain/PlayRecordedMessage_SaveResponse?profileId={0}&recordingIdx={1}&fromProfileId={2}", profileId, recordingIdx, fromProfileId) });
+          break; 
+        case 4:
+          response.Redirect(string.Format("/IVRMain/PlayRecordedMessage?profileId={0}&recordingIdx={1}", profileId, ++recordingIdx));
+          break;
+      }
+
+      Response.ContentType = "text/xml";
+      return Content(response.Element.ToString());
+    }
+
+    [HttpPost]
+    public ActionResult PlayRecordedMessage_SaveResponse(VoiceRequest request, int profileId, int recordingIdx, int fromProfileId)
+    {
+      var response = new TwilioResponse();
+
+      profileManager.SaveRecording(profileId, fromProfileId, request.RecordingUrl);
+
+      response.Say("Your message has been saved.");
+
+      response.Redirect(string.Format("/IVRMain/PlayRecordedMessage?profileId={0}&recordingIdx={1}", profileId, ++recordingIdx));
 
       Response.ContentType = "text/xml";
       return Content(response.Element.ToString());
