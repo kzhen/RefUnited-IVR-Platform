@@ -13,6 +13,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
   public class IVREntryLogic : IIVREntryLogic
   {
     private IProfileManager profileManager;
+    private TwiMLHelper twiMLHelper;
 
     public IVREntryLogic(IProfileManager profileManager)
     {
@@ -52,28 +53,30 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
           }
 
           IVREntryLang.Culture = new System.Globalization.CultureInfo(culture);
+          twiMLHelper = new TwiMLHelper(culture, LanguageHelper.IsImplementedAsMP3(culture));
         }
 
-        response.Say(IVREntryLang.Welcome, new { language = culture });
-        response.Say(string.Format(IVREntryLang.PhoneLookup, string.Join(" ", lookupPhoneNumber.ToArray())), new { language = culture });
+        twiMLHelper.SayOrPlay(response, IVREntryLang.Welcome);
+
+        twiMLHelper.SayOrPlay(response, string.Format(IVREntryLang.PhoneLookup, string.Join(" ", lookupPhoneNumber.ToArray())));
 
         if (!knownNumber)
         {
-          response.Say(IVREntryLang.PhoneNumberNotFound, new { language = culture });
+          twiMLHelper.SayOrPlay(response, IVREntryLang.PhoneNumberNotFound);
           response.Hangup();
           return response;
         }
 
         response.BeginGather(new { finishOnKey = "#", action = "/api/IVRAuthenticate" });
-        response.Say(IVREntryLang.EnterPin, new { language = culture });
+        twiMLHelper.SayOrPlay(response, IVREntryLang.EnterPin);
         response.EndGather();
 
       }
       catch (Exception ex)
       {
-        response.Say(string.Format(IVREntryLang.Error, ex.Message), new { language = culture });
-        response.Say(string.Format(IVREntryLang.Error, ex.Message), new { language = culture });
-        response.Say(string.Format(IVREntryLang.Error, ex.Message), new { language = culture });
+        twiMLHelper.SayOrPlay(response, string.Format(IVREntryLang.Error, ex.Message));
+        twiMLHelper.SayOrPlay(response, string.Format(IVREntryLang.Error, ex.Message));
+        twiMLHelper.SayOrPlay(response, string.Format(IVREntryLang.Error, ex.Message));
         response.Hangup();
       }
       return response;

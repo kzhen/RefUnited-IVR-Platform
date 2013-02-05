@@ -61,6 +61,7 @@
     <Compile Include="Managers\ProfileManager.cs" />
     <Compile Include="Managers\RefugeesUnitedAccountManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TwiMLHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\refunited-dotnet-client\RefugeesUnitedApi\RefugeesUnitedApi.csproj">
