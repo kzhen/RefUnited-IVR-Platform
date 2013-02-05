@@ -17,14 +17,14 @@ namespace RefUnitedIVRPlatform.Web.Controllers
       private string authToken = "";
       private string twilioPhoneNumber = "";
 
-      public HttpResponseMessage Get(SmsRequest request)
+      public HttpResponseMessage Post(SmsRequest request)
       {
         var response = new TwilioResponse();
 
         try
         {
           string outboundPhoneNumber = request.From;
-
+          
           var client = new TwilioRestClient(accountSid, authToken);
 
           var call = client.InitiateOutboundCall(
