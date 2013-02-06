@@ -46,6 +46,8 @@ namespace RefUnitedIVRPlatform.Web.Controllers
       }
 
       var model = profileManager.GetProfile(profileId);
+      var recordings = profileManager.GetRecordings(profileId);
+      model.Recordings = recordings;
 
       if (model == null)
       {
