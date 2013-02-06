@@ -69,15 +69,15 @@ namespace RefUnitedIVRPlatform.Web.Controllers
           case 1:
             //listen to unread messages...
             response.Say("Looking up unread messages.");
-
             var unreadCount = refUnitedAcctManager.GetUnreadMessageCount(profileId);
             response.Say(string.Format("You have {0} message{1}", unreadCount, (unreadCount == 1) ? "" : "s"));
             break;
+          case 2:
+            response.Say("Looking up messages");
+            response.Redirect(string.Format("/IVRMain/PlayMessages?profileId={0}", profileId));
+            break;
           case 3:
             response.Redirect(string.Format("/IVRMain/SendFavMessage_ListFavs?profileId={0}", profileId));
-            break;
-          case 2:
-            response.Say("Looking up old messages");
             break;
           case 4:
             response.Redirect(string.Format("/IVRMain/PlayRecordedMessage?profileId={0}", profileId));
@@ -114,6 +114,15 @@ namespace RefUnitedIVRPlatform.Web.Controllers
         response.Say("an error has occured. " + ex.Message);
         response.Say("an error has occured. " + ex.Message);
       }
+
+      Response.ContentType = "text/xml";
+      return Content(response.Element.ToString());
+    }
+
+    [HttpPost]
+    public ActionResult PlayMessages(VoiceRequest request, int profileId)
+    {
+      var response = new TwilioResponse();
 
       Response.ContentType = "text/xml";
       return Content(response.Element.ToString());
@@ -173,6 +182,8 @@ namespace RefUnitedIVRPlatform.Web.Controllers
         response.Say(string.Format("To send a message to {0} {1} press {2}", fav.FirstName, fav.Surname, i));
       }
 
+      response.Say("Press star to return to main menu");
+
       if (favourites.Count > 9)
       {
         response.Say("To go to the next page press hash");
@@ -190,6 +201,24 @@ namespace RefUnitedIVRPlatform.Web.Controllers
       var response = new TwilioResponse();
 
       var favsArray = favs.Split(',');
+
+      if (request.Digits.Equals("#"))
+      {
+        //goto next page...
+        //implement
+        response.Say("This is no yet implemented. Sorry!");
+        response.Redirect("/IVRMain/MainMenu");
+
+        Response.ContentType = "text/xml";
+        return Content(response.Element.ToString());
+      }
+      else if (request.Digits.Equals("*"))
+      {
+        response.Redirect("/IVRMain/MainMenu");
+
+        Response.ContentType = "text/xml";
+        return Content(response.Element.ToString());
+      }
 
       var selection = int.Parse(request.Digits);
 
