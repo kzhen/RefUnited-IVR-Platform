@@ -127,12 +127,16 @@ namespace RefUnitedIVRPlatform.Business.Managers
       return profileRepository.GetByPhoneNumber(phoneNumber);
     }
 
-
     public void DeleteRecording(int profileId, int recordingIdx)
     {
       var itemToDelete = recordings.Where(m => m.ToProfileId == profileId).ToList()[recordingIdx];
 
       recordings.Remove(itemToDelete);
+    }
+
+    public List<IVRProfile> GetAllProfiles()
+    {
+      return this.profileRepository.GetAll();
     }
   }
 }

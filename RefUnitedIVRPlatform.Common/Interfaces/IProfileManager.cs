@@ -30,5 +30,7 @@ namespace RefUnitedIVRPlatform.Common.Interfaces
     IVRProfile GetProfileByPhoneNumber(string phoneNumber);
 
     void DeleteRecording(int profileId, int recordingIdx);
+
+    List<IVRProfile> GetAllProfiles();
   }
 }

@@ -215,11 +215,11 @@
     <Compile Include="Controllers\IVREntryController.cs" />
     <Compile Include="Controllers\IVRMainController.cs" />
     <Compile Include="Controllers\SMSReceiverController.cs" />
-    <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\PinAccessViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -284,9 +284,11 @@
     <Content Include="Views\Home\Recordings.cshtml" />
     <Content Include="Views\Account\Info.cshtml" />
     <Content Include="Views\Account\AccountNotFound.cshtml" />
+    <Content Include="Views\Account\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Filters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

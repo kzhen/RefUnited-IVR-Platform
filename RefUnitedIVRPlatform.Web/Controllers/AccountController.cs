@@ -8,7 +8,6 @@ using System.Web.Security;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
-using RefUnitedIVRPlatform.Web.Filters;
 using RefUnitedIVRPlatform.Web.Models;
 using RefUnitedIVRPlatform.Common.Interfaces;
 using RefUnitedIVRPlatform.Common.Entities;
@@ -32,9 +31,21 @@ namespace RefUnitedIVRPlatform.Web.Controllers
       return View();
     }
 
-    public ActionResult Info(string phoneNumber)
+    public ActionResult List()
     {
-      var model = profileManager.GetProfileByPhoneNumber(phoneNumber);
+      var model = profileManager.GetAllProfiles();
+
+      return View(model);
+    }
+
+    public ActionResult Info(int profileId)
+    {
+      if (Request.Cookies["RefUser"] != null && Request.Cookies["RefProfileId"] != null)
+      {
+        profileId = int.Parse(Request.Cookies["RefProfileId"].Value);
+      }
+
+      var model = profileManager.GetProfile(profileId);
 
       if (model == null)
       {
@@ -55,6 +66,9 @@ namespace RefUnitedIVRPlatform.Web.Controllers
         var profile = refUnitedAccountManager.GetProfile(authResults.ProfileId);
         profile.ProfileId = authResults.ProfileId;
 
+        var token = FormsAuthentication.Encrypt(new FormsAuthenticationTicket(model.UserName, false, 60));
+        Response.Cookies.Add(new HttpCookie("RefUser", token));
+
         return View("VerifyProfile", profile);
       }
 
@@ -73,12 +87,18 @@ namespace RefUnitedIVRPlatform.Web.Controllers
         //if(hasChanged)
         //{
         refUnitedAccountManager.UpdateProfile(profile);
-        var model = refUnitedAccountManager.GetProfile(profile.ProfileId);
+        var profileModel = refUnitedAccountManager.GetProfile(profile.ProfileId);
         //} 
         //else 
         //{
         //
         //}
+        PinAccessViewModel model = new PinAccessViewModel()
+        {
+          ProfileId = profileModel.ProfileId,
+          DialCode = profileModel.DialCode,
+          CellPhoneNumber = profileModel.CellPhoneNumber
+        };
 
         return View("SetupPINAccess", model);
       }
@@ -96,6 +116,8 @@ namespace RefUnitedIVRPlatform.Web.Controllers
       string pin = form["PIN"];
       string language = form["Language"];
       string phoneNumber = string.Format("{0}{1}", form["DialCode"], form["CellPhoneNumber"]);
+
+      Response.Cookies.Add(new HttpCookie("RefProfileId", profileId.ToString()));
 
       var ivrProfile = new IVRProfile()
       {
