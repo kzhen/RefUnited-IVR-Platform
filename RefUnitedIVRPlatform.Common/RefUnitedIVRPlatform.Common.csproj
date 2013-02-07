@@ -61,6 +61,7 @@
     <Compile Include="Entities\Profile.cs" />
     <Compile Include="Entities\Recording.cs" />
     <Compile Include="Interfaces\IIVREntryLogic.cs" />
+    <Compile Include="Interfaces\IIVRMainLogic.cs" />
     <Compile Include="Interfaces\IProfileManager.cs" />
     <Compile Include="Interfaces\IProfileRepository.cs" />
     <Compile Include="Interfaces\IRefugeesUnitedAccountManager.cs" />

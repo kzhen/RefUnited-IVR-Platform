@@ -16,27 +16,19 @@ namespace RefUnitedIVRPlatform.Web.Controllers
   {
     private IProfileManager profileManager;
     private IRefugeesUnitedAccountManager refUnitedAcctManager;
+    private IIVRMainLogic ivrMainLogic;
 
-    public IVRMainController(IProfileManager profileManager, IRefugeesUnitedAccountManager refUnitedAcctManager)
+    public IVRMainController(IProfileManager profileManager, IRefugeesUnitedAccountManager refUnitedAcctManager, IIVRMainLogic ivrMainLogic)
     {
       this.profileManager = profileManager;
       this.refUnitedAcctManager = refUnitedAcctManager;
+      this.ivrMainLogic = ivrMainLogic;
     }
 
     [HttpPost]
     public ActionResult MainMenu(VoiceRequest request)
     {
-      var response = new TwilioResponse();
-
-      response.Say("Main menu.");
-      response.BeginGather(new { numDigits = 1, action = "/IVRMain/MainMenuSelection" });
-      response.Say("Press one to check messages.");
-      response.Say("Press two to listen to old messages.");
-      response.Say("Press three to send a voice message to a favourite.");
-      response.Say("Press four to listen to voice messages.");
-      response.Say("Press eight to record a test message.");
-      response.Say("Press nine to listen to all recorded messages.");
-      response.EndGather();
+      var response = ivrMainLogic.GetMainMenu();
 
       Response.ContentType = "text/xml";
       return Content(response.Element.ToString());
@@ -45,84 +37,7 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     [HttpPost]
     public ActionResult MainMenuSelection(VoiceRequest request)
     {
-      var response = new TwilioResponse();
-
-      try
-      {
-        string lookupPhoneNumber = string.Empty;
-
-        if (request.Direction.Equals("inbound"))
-        {
-          lookupPhoneNumber = request.From;
-        }
-        else if (request.Direction.Equals("outbound-api"))
-        {
-          lookupPhoneNumber = request.To;
-        }
-
-        int profileId = profileManager.GetProfileId(lookupPhoneNumber);
-
-        var selection = int.Parse(request.Digits);
-
-        switch (selection)
-        {
-          case 1:
-            //listen to unread messages...
-            response.Say("Looking up unread messages.");
-            var unreadCount = refUnitedAcctManager.GetUnreadMessageCount(profileId);
-            response.Say(string.Format("You have {0} message{1}", unreadCount, (unreadCount == 1) ? "" : "s"));
-            break;
-          case 2:
-            response.Say("Looking up messages");
-            response.Redirect(string.Format("/IVRMain/PlayMessages?profileId={0}", profileId));
-            break;
-          case 3:
-            response.Redirect(string.Format("/IVRMain/SendFavMessage_ListFavs?profileId={0}", profileId));
-            break;
-          case 4:
-            response.Redirect(string.Format("/IVRMain/PlayRecordedMessage?profileId={0}", profileId));
-            break;
-          case 8:
-            response.Say("Time to record something, press any key when you are done.", new { voice = "woman" });
-            response.Record(new { action = "/IVRMain/SaveRecording" });
-            break;
-          case 9:
-            var recordings = profileManager.GetRecordingUrls();
-
-            if (recordings.Count == 0)
-            {
-              response.Say("You have no recorded messages.");
-            }
-            else
-            {
-              response.Say(string.Format("You have {0} recorded message{1}", recordings.Count, (recordings.Count == 1) ? "" : "s"));
-              foreach (var recording in recordings)
-              {
-                response.Play(recording);
-              }
-            }
-            break;
-          default:
-            break;
-        }
-
-        response.Redirect("/IVRMain/MainMenu");
-      }
-      catch (Exception ex)
-      {
-        response.Say("an error has occured. " + ex.Message);
-        response.Say("an error has occured. " + ex.Message);
-        response.Say("an error has occured. " + ex.Message);
-      }
-
-      Response.ContentType = "text/xml";
-      return Content(response.Element.ToString());
-    }
-
-    [HttpPost]
-    public ActionResult PlayMessages(VoiceRequest request, int profileId)
-    {
-      var response = new TwilioResponse();
+      var response = ivrMainLogic.GetMenuSelection(request);
 
       Response.ContentType = "text/xml";
       return Content(response.Element.ToString());
@@ -131,15 +46,7 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     [HttpPost]
     public ActionResult SaveRecording(VoiceRequest request)
     {
-      var url = request.RecordingUrl;
-
-      profileManager.SaveRecording(url);
-
-      var response = new TwilioResponse();
-
-      response.Say("Thank you. The recording has been saved.");
-
-      response.Redirect("/IVRMain/MainMenu");
+      var response = ivrMainLogic.SaveRecording(request);
 
       Response.ContentType = "text/xml";
       return Content(response.Element.ToString());
@@ -148,48 +55,7 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     [HttpPost]
     public ActionResult SendFavMessage_ListFavs(VoiceRequest request, int profileId)
     {
-      var response = new TwilioResponse();
-
-      response.Say("Listing favourites");
-
-      var favourites = refUnitedAcctManager.GetFavourites(profileId);
-
-      if (favourites.Count == 0)
-      {
-        response.Say("You have no favourites to send voice messages to.");
-        response.Redirect("/IVRMain/MainMenu");
-      }
-
-      StringBuilder sb = new StringBuilder();
-
-      favourites.ForEach(x =>
-        {
-          sb.Append(x.ProfileId);
-          sb.Append(",");
-        });
-
-      string favs = sb.ToString().Substring(0, sb.Length - 1);
-
-      response.BeginGather(new { numDigits = 1, action = string.Format("/IVRMain/SendFavMessage_RecordMsg?profileId={0}&favs={1}", profileId, favs) });
-
-      //TODO: add paging support!
-
-      int max = (favourites.Count <= 9) ? favourites.Count : 9;
-
-      for (int i = 1; i <= max; i++)
-      {
-        var fav = favourites[i - 1];
-        response.Say(string.Format("To send a message to {0} {1} press {2}", fav.FirstName, fav.Surname, i));
-      }
-
-      response.Say("Press star to return to main menu");
-
-      if (favourites.Count > 9)
-      {
-        response.Say("To go to the next page press hash");
-      }
-
-      response.EndGather();
+      var response = ivrMainLogic.ListFavourites(request, profileId);
 
       Response.ContentType = "text/xml";
       return Content(response.Element.ToString());
@@ -198,34 +64,7 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     [HttpPost]
     public ActionResult SendFavMessage_RecordMsg(VoiceRequest request, int profileId, string favs)
     {
-      var response = new TwilioResponse();
-
-      var favsArray = favs.Split(',');
-
-      if (request.Digits.Equals("#"))
-      {
-        //goto next page...
-        //implement
-        response.Say("This is no yet implemented. Sorry!");
-        response.Redirect("/IVRMain/MainMenu");
-
-        Response.ContentType = "text/xml";
-        return Content(response.Element.ToString());
-      }
-      else if (request.Digits.Equals("*"))
-      {
-        response.Redirect("/IVRMain/MainMenu");
-
-        Response.ContentType = "text/xml";
-        return Content(response.Element.ToString());
-      }
-
-      var selection = int.Parse(request.Digits);
-
-      string targetProfileId = favsArray[selection - 1];
-
-      response.Say("Record your message after the tone, press any key when you are done.", new { voice = "woman" });
-      response.Record(new { action = string.Format("/IVRMain/SendFavMessage_SaveRecording?profileId={0}&targetProfileId={1}", profileId, targetProfileId) });
+      var response = ivrMainLogic.RecordMessageForFavourite(request, profileId, favs);
 
       Response.ContentType = "text/xml";
       return Content(response.Element.ToString());
@@ -234,15 +73,7 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     [HttpPost]
     public ActionResult SendFavMessage_SaveRecording(VoiceRequest request, int profileId, int targetProfileId)
     {
-      var url = request.RecordingUrl;
-
-      profileManager.SaveRecording(profileId, targetProfileId, url);
-
-      var response = new TwilioResponse();
-
-      response.Say("Thank you. Your message has been saved.");
-
-      response.Redirect("/IVRMain/MainMenu");
+      var response = ivrMainLogic.SaveRecordingForFavourite(request, profileId, targetProfileId);
 
       Response.ContentType = "text/xml";
       return Content(response.Element.ToString());
@@ -251,46 +82,7 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     [HttpPost]
     public ActionResult PlayRecordedMessage(VoiceRequest request, int profileId, int? recordingIdx)
     {
-      var response = new TwilioResponse();
-
-      var voiceMessages = profileManager.GetRecordings(profileId);
-
-      if (voiceMessages == null || voiceMessages.Count == 0)
-      {
-        response.Say("You have no voice messages");
-        response.Redirect("/IVRMain/MainMenu");
-        Response.ContentType = "text/xml";
-        return Content(response.Element.ToString());
-      }
-
-      if (recordingIdx.HasValue && recordingIdx.Value >= voiceMessages.Count)
-      {
-        response.Say("No more messages.");
-        response.Redirect("/IVRMain/MainMenu");
-        Response.ContentType = "text/xml";
-        return Content(response.Element.ToString());
-      }
-
-      Recording voiceMessage;
-
-      if (recordingIdx.HasValue)
-      {
-        voiceMessage = voiceMessages[recordingIdx.Value];
-      }
-      else
-      {
-        recordingIdx = 0;
-        voiceMessage = voiceMessages[recordingIdx.Value];
-      }
-
-      response.Play(voiceMessage.Url);
-
-      response.BeginGather(new { numDigits = 1, action = string.Format("/IVRMain/PlayRecordedMessage_Response?profileId={0}&recordingIdx={1}&fromProfileId={2}", profileId, recordingIdx.Value, voiceMessage.FromProfileId) });
-      response.Say("Press one to repeat this message");
-      response.Say("Press two to delete this message");
-      response.Say("Press three to reply to this message");
-      response.Say("Press four to go to the next message");
-      response.EndGather();
+      var response = ivrMainLogic.PlayRecordedVoiceMessage(request, profileId, recordingIdx);
 
       Response.ContentType = "text/xml";
       return Content(response.Element.ToString());
@@ -299,27 +91,7 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     [HttpPost]
     public ActionResult PlayRecordedMessage_Response(VoiceRequest request, int profileId, int recordingIdx, int fromProfileId)
     {
-      var response = new TwilioResponse();
-
-      var digits = int.Parse(request.Digits);
-
-      switch (digits)
-      {
-        case 1:
-          response.Redirect(string.Format("/IVRMain/PlayRecordedMessage?profileId={0}&recordingIdx={1}", profileId, recordingIdx));
-          break;
-        case 2:
-          profileManager.DeleteRecording(profileId, recordingIdx);
-          response.Redirect(string.Format("/IVRMain/PlayRecordedMessage?profileId={0}&recordingIdx={1}", profileId, recordingIdx));
-          break;
-        case 3:
-          response.Say("At the tone please record your response. Press any key when you are done.");
-          response.Record(new { action = string.Format("/IVRMain/PlayRecordedMessage_SaveResponse?profileId={0}&recordingIdx={1}&fromProfileId={2}", profileId, recordingIdx, fromProfileId) });
-          break; 
-        case 4:
-          response.Redirect(string.Format("/IVRMain/PlayRecordedMessage?profileId={0}&recordingIdx={1}", profileId, ++recordingIdx));
-          break;
-      }
+      var response = ivrMainLogic.PlayRecordedVoiceMessageSelection(request, profileId, recordingIdx, fromProfileId);
 
       Response.ContentType = "text/xml";
       return Content(response.Element.ToString());
@@ -328,43 +100,16 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     [HttpPost]
     public ActionResult PlayRecordedMessage_SaveResponse(VoiceRequest request, int profileId, int recordingIdx, int fromProfileId)
     {
-      var response = new TwilioResponse();
-
-      profileManager.SaveRecording(profileId, fromProfileId, request.RecordingUrl);
-
-      response.Say("Your message has been saved.");
-
-      response.Redirect(string.Format("/IVRMain/PlayRecordedMessage?profileId={0}&recordingIdx={1}", profileId, ++recordingIdx));
+      var response = ivrMainLogic.SaveVoiceMessageReply(request, profileId, recordingIdx, fromProfileId);
 
       Response.ContentType = "text/xml";
       return Content(response.Element.ToString());
     }
 
     [HttpPost]
-    public ActionResult PlayRecordedMessages(VoiceRequest request, int profileId)
+    public ActionResult ReadPlatformMessages(VoiceRequest request, int profileId)
     {
-      var response = new TwilioResponse();
-
-      var voiceMessages = profileManager.GetRecordings(profileId);
-
-      if (voiceMessages == null || voiceMessages.Count == 0)
-      {
-        response.Say("You have no voice messages");
-        response.Redirect("/IVRMain/MainMenu");
-        Response.ContentType = "text/xml";
-        return Content(response.Element.ToString());
-      }
-
-      //response.Say("Playing recorded voice messages");
-      response.Say(string.Format("You have {0} voice message{1}", voiceMessages.Count, (voiceMessages.Count == 1) ? "" : "s"));
-
-      foreach (var msg in voiceMessages)
-      {
-        response.Play(msg.Url);
-      }
-
-      response.Say("Finished playing voice messages");
-      response.Redirect("/IVRMain/MainMenu");
+      var response = ivrMainLogic.PlayPlatformMessages(request, profileId);
 
       Response.ContentType = "text/xml";
       return Content(response.Element.ToString());

@@ -26,9 +26,12 @@ namespace RefUnitedIVRPlatform.Web
       var builder = new ContainerBuilder();
 
       builder.Register<IProfileRepository>(m => new ProfileRepositoryInMemory()).SingleInstance();
-      builder.Register<IProfileManager>(m => new ProfileManager(m.Resolve<IProfileRepository>())).SingleInstance();
+      
       builder.Register<IRefugeesUnitedAccountManager>(m => new RefugeesUnitedAccountManager()).InstancePerHttpRequest();
+      builder.Register<IProfileManager>(m => new ProfileManager(m.Resolve<IProfileRepository>())).SingleInstance();
+      
       builder.Register<IIVREntryLogic>(m => new IVREntryLogic(m.Resolve<IProfileManager>())).InstancePerHttpRequest();
+      builder.Register<IIVRMainLogic>(m => new IVRMainLogic(m.Resolve<IProfileManager>(), m.Resolve<IRefugeesUnitedAccountManager>()));
 
       builder.RegisterControllers(typeof(MvcApplication).Assembly);
       builder.RegisterApiControllers(typeof(MvcApplication).Assembly);
