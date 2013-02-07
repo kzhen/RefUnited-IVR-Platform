@@ -14,5 +14,7 @@ namespace RefUnitedIVRPlatform.Common.Interfaces
     void UpdateProfile(Profile profile);
     int GetUnreadMessageCount(int profileId);
     List<Profile> GetFavourites(int profileId);
+
+    ProfileMessageCollection GetMessages(int profileId);
   }
 }

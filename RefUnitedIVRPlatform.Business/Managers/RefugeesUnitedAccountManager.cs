@@ -57,5 +57,15 @@ namespace RefUnitedIVRPlatform.Business.Managers
 
       return results;
     }
+
+
+    public ProfileMessageCollection GetMessages(int profileId)
+    {
+      ApiRequest request = new ApiRequest(apiRequestSettings);
+
+      var results = request.GetMessageCollection(profileId);
+
+      return results;
+    }
   }
 }
