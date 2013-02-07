@@ -60,6 +60,7 @@
     <Compile Include="Entities\IVRProfile.cs" />
     <Compile Include="Entities\Profile.cs" />
     <Compile Include="Entities\Recording.cs" />
+    <Compile Include="Interfaces\IIVRAuthenticateLogic.cs" />
     <Compile Include="Interfaces\IIVREntryLogic.cs" />
     <Compile Include="Interfaces\IIVRMainLogic.cs" />
     <Compile Include="Interfaces\IProfileManager.cs" />

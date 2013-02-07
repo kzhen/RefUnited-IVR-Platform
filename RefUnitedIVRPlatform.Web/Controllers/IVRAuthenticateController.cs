@@ -13,45 +13,16 @@ namespace RefUnitedIVRPlatform.Web.Controllers
 {
     public class IVRAuthenticateController : ApiController
     {
-      private IProfileManager profileManager;
+      private IIVRAuthenticateLogic ivrAuthLogic;
 
-      public IVRAuthenticateController(IProfileManager profileManager)
+      public IVRAuthenticateController(IIVRAuthenticateLogic authLogic)
       {
-        this.profileManager = profileManager;
+        this.ivrAuthLogic = authLogic;
       }
 
-      public HttpResponseMessage Post(VoiceRequest request)
+      public HttpResponseMessage Post(VoiceRequest request, string language)
       {
-        var response = new TwilioResponse();
-
-        string lookupPhoneNumber = string.Empty;
-
-        if (request.Direction.Equals("inbound"))
-        {
-          lookupPhoneNumber = request.From;
-        }
-        else if (request.Direction.Equals("outbound-api"))
-        {
-          lookupPhoneNumber = request.To;
-        }
-
-        var pin = request.Digits;
-
-        var result = profileManager.CheckPin(lookupPhoneNumber, pin);
-
-        string correctPin = profileManager.GetPin(lookupPhoneNumber);
-
-        if (result)
-        {
-          response.Redirect("/IVRMain/MainMenu", "POST");
-        }
-        else
-        {
-          response.Say("Your PIN was incorrect, sad face.");
-          response.Say("You entered: " + string.Join(" ", pin.ToArray()));
-          response.Say("But the correct pin was: " + string.Join(" ", correctPin.ToArray()));
-          response.Hangup();
-        }
+        var response = ivrAuthLogic.GetAuthentication(request, language);
 
         return this.Request.CreateResponse(HttpStatusCode.OK, response.Element, new XmlMediaTypeFormatter());
       }
