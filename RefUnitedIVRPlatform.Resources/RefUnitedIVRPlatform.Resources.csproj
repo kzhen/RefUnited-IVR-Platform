@@ -39,6 +39,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IVRAuthLang.es.Designer.cs">
+      <DependentUpon>IVRAuthLang.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="IVRAuthLang.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IVRAuthLang.resx</DependentUpon>
+    </Compile>
     <Compile Include="IVREntryLang.ar.Designer.cs">
       <DependentUpon>IVREntryLang.ar.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -57,6 +67,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="IVRAuthLang.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IVRAuthLang.es.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IVRAuthLang.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IVRAuthLang.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="IVREntryLang.ar.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>IVREntryLang.ar.Designer.cs</LastGenOutput>

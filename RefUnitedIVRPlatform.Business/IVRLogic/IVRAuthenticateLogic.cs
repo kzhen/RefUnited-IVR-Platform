@@ -13,6 +13,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
   public class IVRAuthenticateLogic : IIVRAuthenticateLogic
   {
     private IProfileManager profileManager;
+    private TwiMLHelper twiMLHelper;
 
     public IVRAuthenticateLogic(IProfileManager profileManager)
     {
@@ -21,6 +22,8 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
 
     public TwilioResponse GetAuthentication(VoiceRequest request, string language)
     {
+      var response = new TwilioResponse();
+
       if (string.IsNullOrEmpty(language))
       {
         language = LanguageHelper.GetDefaultCulture();
@@ -30,7 +33,8 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
         language = LanguageHelper.GetValidCulture(language);
       }
 
-      var response = new TwilioResponse();
+      IVRAuthLang.Culture = new System.Globalization.CultureInfo(language);
+      twiMLHelper = new TwiMLHelper(language, LanguageHelper.IsImplementedAsMP3(language));
 
       string lookupPhoneNumber = string.Empty;
 
@@ -51,18 +55,20 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
 
       if (result)
       {
-        response.Redirect("/IVRMain/MainMenu", "POST");
+        response.Redirect(string.Format("/IVRMain/MainMenu?language={0}", language), "POST");
       }
       else
       {
-        response.Say("Your PIN was incorrect, sad face.");
+        twiMLHelper.SayOrPlay(response, IVRAuthLang.IncorrectPIN);
+
         //DEBUG
         response.Say("You entered: " + string.Join(" ", pin.ToArray()));
         response.Say("But the correct pin was: " + string.Join(" ", correctPin.ToArray()));
         //DEBUG
-        
+
         response.Hangup();
       }
+
 
       return response;
     }

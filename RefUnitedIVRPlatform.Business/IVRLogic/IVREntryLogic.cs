@@ -67,7 +67,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
           return response;
         }
 
-        response.BeginGather(new { finishOnKey = "#", action = "/api/IVRAuthenticate" });
+        response.BeginGather(new { finishOnKey = "#", action = string.Format("/api/IVRAuthenticate?language={0}", culture) });
         twiMLHelper.SayOrPlay(response, IVREntryLang.EnterPin);
         response.EndGather();
 

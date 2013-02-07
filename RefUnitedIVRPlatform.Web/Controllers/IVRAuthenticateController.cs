@@ -11,20 +11,20 @@ using Twilio.TwiML;
 
 namespace RefUnitedIVRPlatform.Web.Controllers
 {
-    public class IVRAuthenticateController : ApiController
+  public class IVRAuthenticateController : ApiController
+  {
+    private IIVRAuthenticateLogic ivrAuthLogic;
+
+    public IVRAuthenticateController(IIVRAuthenticateLogic authLogic)
     {
-      private IIVRAuthenticateLogic ivrAuthLogic;
-
-      public IVRAuthenticateController(IIVRAuthenticateLogic authLogic)
-      {
-        this.ivrAuthLogic = authLogic;
-      }
-
-      public HttpResponseMessage Post(VoiceRequest request, string language)
-      {
-        var response = ivrAuthLogic.GetAuthentication(request, language);
-
-        return this.Request.CreateResponse(HttpStatusCode.OK, response.Element, new XmlMediaTypeFormatter());
-      }
+      this.ivrAuthLogic = authLogic;
     }
+
+    public HttpResponseMessage Post(VoiceRequest request, string language)
+    {
+      var response = ivrAuthLogic.GetAuthentication(request, language);
+
+      return this.Request.CreateResponse(HttpStatusCode.OK, response.Element, new XmlMediaTypeFormatter());
+    }
+  }
 }
