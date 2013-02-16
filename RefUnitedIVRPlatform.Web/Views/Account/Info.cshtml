@@ -1,7 +1,7 @@
 ﻿@model RefUnitedIVRPlatform.Common.Entities.IVRProfile
 
 @{
-    ViewBag.Title = "Info";
+  ViewBag.Title = "Info";
 }
 
 <h2>Info for @Model.PhoneNumber</h2>
@@ -12,11 +12,15 @@
     <td>ProfileId</td>
     <td>@Model.ProfileId</td>
   </tr>
-    <tr>
+  <tr>
+    <td>Full Name</td>
+    <td>@Model.FullName</td>
+  </tr>
+  <tr>
     <td>PIN</td>
     <td>@Model.PIN</td>
   </tr>
-    <tr>
+  <tr>
     <td>Culture</td>
     <td>@Model.Culture</td>
   </tr>
@@ -29,18 +33,18 @@
     <td>To</td>
     <td>Url</td>
   </tr>
-@foreach (var rec in Model.Recordings)
-{
-  <tr>
-    <td>@rec.FromProfileId</td>
-    <td>@rec.ToProfileId</td>
-    <td>@rec.Url</td>
-  </tr>
-}
-@if (Model.Recordings.Count == 0)
-{
-  <tr>
-    <td colspan="3">No recordings</td>
-  </tr>
-}
+  @foreach (var rec in Model.Recordings)
+  {
+    <tr>
+      <td>@rec.FromProfileId</td>
+      <td>@rec.ToProfileId</td>
+      <td>@rec.Url</td>
+    </tr>
+  }
+  @if (Model.Recordings.Count == 0)
+  {
+    <tr>
+      <td colspan="3">No recordings</td>
+    </tr>
+  }
 </table>

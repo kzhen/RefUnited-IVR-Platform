@@ -8,6 +8,7 @@ namespace RefUnitedIVRPlatform.Common.Entities
 {
   public class IVRProfile
   {
+    public string FullName { get; set; }
     public int ProfileId { get; set; }
     public string PhoneNumber { get; set; }
     public string PIN { get; set; }

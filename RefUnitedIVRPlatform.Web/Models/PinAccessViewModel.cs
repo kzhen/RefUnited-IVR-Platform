@@ -11,6 +11,7 @@ namespace RefUnitedIVRPlatform.Web.Models
     public int ProfileId { get; set; }
     public string DialCode { get; set; }
     public string CellPhoneNumber { get; set; }
+    public string FullName { get; set; }
 
     [Required]
     public string Language { get; set; }

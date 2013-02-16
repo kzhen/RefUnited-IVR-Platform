@@ -38,21 +38,21 @@ namespace RefUnitedIVRPlatform.Web.Controllers
       return View(model);
     }
 
-    public ActionResult Info(int profileId)
+    public ActionResult Info(int? profileId)
     {
-      if (Request.Cookies["RefUser"] != null && Request.Cookies["RefProfileId"] != null)
+      if (Request.Cookies["RefUser"] != null && Request.Cookies["RefProfileId"] != null && !profileId.HasValue)
       {
         profileId = int.Parse(Request.Cookies["RefProfileId"].Value);
       }
 
-      var model = profileManager.GetProfile(profileId);
-      var recordings = profileManager.GetRecordings(profileId);
-      model.Recordings = recordings;
-
-      if (model == null)
+      if (!profileId.HasValue == null)
       {
         return View("AccountNotFound");
       }
+
+      var model = profileManager.GetProfile(profileId.Value);
+      var recordings = profileManager.GetRecordings(profileId.Value);
+      model.Recordings = recordings;
 
       return View(model);
     }
@@ -99,7 +99,8 @@ namespace RefUnitedIVRPlatform.Web.Controllers
         {
           ProfileId = profileModel.ProfileId,
           DialCode = profileModel.DialCode,
-          CellPhoneNumber = profileModel.CellPhoneNumber
+          CellPhoneNumber = profileModel.CellPhoneNumber,
+          FullName = profile.FirstName + " " + profile.Surname
         };
 
         return View("SetupPINAccess", model);
@@ -118,6 +119,7 @@ namespace RefUnitedIVRPlatform.Web.Controllers
       string pin = form["PIN"];
       string language = form["Language"];
       string phoneNumber = string.Format("{0}{1}", form["DialCode"], form["CellPhoneNumber"]);
+      string fullName = (string.IsNullOrEmpty(form["FullName"])) ? "" : form["FullName"];
 
       Response.Cookies.Add(new HttpCookie("RefProfileId", profileId.ToString()));
 
@@ -126,7 +128,8 @@ namespace RefUnitedIVRPlatform.Web.Controllers
         ProfileId = profileId,
         PIN = pin,
         Culture = language,
-        PhoneNumber = phoneNumber
+        PhoneNumber = phoneNumber,
+        FullName = fullName
       };
 
       profileManager.CreateProfile(ivrProfile);

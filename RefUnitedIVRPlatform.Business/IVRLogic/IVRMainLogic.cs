@@ -263,6 +263,17 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
         voiceMessage = voiceMessages[recordingIdx.Value];
       }
 
+      try
+      {
+        var profile = profileManager.GetProfile(voiceMessage.FromProfileId);
+
+        response.Say(string.Format("Playing message {0} from {1}", recordingIdx + 1, profile.FullName));
+      }
+      catch (Exception)
+      {
+        response.Say(string.Format("Playing message {0}", recordingIdx + 1));
+      }
+
       response.Play(voiceMessage.Url);
 
       response.BeginGather(new { numDigits = 1, action = string.Format("/IVRMain/PlayRecordedMessage_Response?profileId={0}&recordingIdx={1}&fromProfileId={2}", profileId, recordingIdx.Value, voiceMessage.FromProfileId) });
