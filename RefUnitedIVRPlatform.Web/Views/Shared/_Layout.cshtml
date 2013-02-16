@@ -9,39 +9,15 @@
   @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-  <!--  <header>
-    <div class="content-wrapper">
-      <div class="float-left">
-        <p class="site-title">@Html.ActionLink("your logo here", "Index", "Home")</p>
-      </div>
-      <div class="float-right">
-        <section id="login">
-          @Html.Partial("_LoginPartial")
-        </section>
-        <nav>
-          <ul id="menu">
-            <li>@Html.ActionLink("Home", "Index", "Home")</li>
-            <li>@Html.ActionLink("About", "About", "Home")</li>
-            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-  </header>-->
   <div class="navbar">
     <div class="navbar-inner">
       <a class="brand" href="@Url.Action("Index", "Home")">Refugees United - IVR Platform</a>
-      @*<ul class="nav">
-        <li class="active"><a href="@Url.Action("Index", "Designer")">Designer</a></li>
-      </ul>*@
     </div>
   </div>
   <div class="container">
     @RenderBody()
   </div>
-
-
-  @Scripts.Render("~/bundles/jquery", "~/bundles/jslibs")
+  @Scripts.Render("~/bundles/jquery")
   @RenderSection("scripts", required: false)
 </body>
 </html>
