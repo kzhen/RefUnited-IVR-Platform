@@ -40,19 +40,34 @@ namespace RefUnitedIVRPlatform.Web.Controllers
 
     public ActionResult Info(int? profileId)
     {
+      bool canEdit = false;
+
       if (Request.Cookies["RefUser"] != null && Request.Cookies["RefProfileId"] != null && !profileId.HasValue)
       {
         profileId = int.Parse(Request.Cookies["RefProfileId"].Value);
+        canEdit = true;
       }
 
-      if (!profileId.HasValue == null)
+      if (!profileId.HasValue)
       {
         return View("AccountNotFound");
       }
 
-      var model = profileManager.GetProfile(profileId.Value);
+      var profile = profileManager.GetProfile(profileId.Value);
+
+      if (profile == null)
+      {
+        return View("AccountNotFound");
+      }
+
       var recordings = profileManager.GetRecordings(profileId.Value);
-      model.Recordings = recordings;
+      profile.Recordings = recordings;
+
+      IVRProfileViewModel model = new IVRProfileViewModel()
+      {
+        Profile = profile,
+        CanEdit = canEdit
+      };
 
       return View(model);
     }
