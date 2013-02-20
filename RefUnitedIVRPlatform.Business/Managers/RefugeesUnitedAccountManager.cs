@@ -12,50 +12,42 @@ namespace RefUnitedIVRPlatform.Business.Managers
   public class RefugeesUnitedAccountManager : IRefugeesUnitedAccountManager
   {
     private static int FAVOURITE_PAGE_SIZE = 9;
+    private IApiRequest apiRequest;
 
-    private ApiRequestSettings apiRequestSettings = new ApiRequestSettings()
+    public RefugeesUnitedAccountManager(IApiRequest apiRequest)
     {
-    };
+      this.apiRequest = apiRequest;
+    }
 
     public ProfileLoginResult ValidateLogin(string username, string password)
     {
-      ApiRequest request = new ApiRequest(apiRequestSettings);
-
-      var loginRequest = request.ProfileLogin(username, password);
+      var loginRequest = apiRequest.ProfileLogin(username, password);
 
       return loginRequest;
     }
 
     public Profile GetProfile(int profileId)
     {
-      ApiRequest request = new ApiRequest(apiRequestSettings);
-
-      var profile = request.GetProfile(profileId);
+      var profile = apiRequest.GetProfile(profileId);
 
       return profile;
     }
 
     public void UpdateProfile(Profile profile)
     {
-      ApiRequest request = new ApiRequest(apiRequestSettings);
-
-      request.UpdateProfile(profile);
+      apiRequest.UpdateProfile(profile);
     }
 
     public int GetUnreadMessageCount(int profileId)
     {
-      ApiRequest request = new ApiRequest(apiRequestSettings);
-
-      var result = request.GetUnreadMessages(profileId);
+      var result = apiRequest.GetUnreadMessages(profileId);
 
       return result.UnreadMessages;
     }
 
     public List<Profile> GetFavourites(int profileId, int pageIdx)
     {
-      ApiRequest request = new ApiRequest(apiRequestSettings);
-
-      var results = request.GetFavourites(profileId);
+      var results = apiRequest.GetFavourites(profileId);
 
       if (results.Count > FAVOURITE_PAGE_SIZE)
       {
@@ -76,9 +68,7 @@ namespace RefUnitedIVRPlatform.Business.Managers
 
     public ProfileMessageCollection GetMessages(int profileId)
     {
-      ApiRequest request = new ApiRequest(apiRequestSettings);
-
-      var results = request.GetMessageCollection(profileId);
+      var results = apiRequest.GetMessageCollection(profileId);
 
       return results;
     }
