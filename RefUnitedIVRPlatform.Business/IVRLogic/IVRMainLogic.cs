@@ -31,8 +31,6 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       response.Say("Press two to listen to old messages.");
       response.Say("Press three to send a voice message to a favourite.");
       response.Say("Press four to listen to voice messages.");
-      response.Say("Press eight to record a test message.");
-      response.Say("Press nine to listen to all recorded messages.");
       response.EndGather();
 
       return response;
@@ -78,26 +76,6 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
           case 4:
             response.Redirect(string.Format("/IVRMain/PlayRecordedMessage?profileId={0}", profileId));
             break;
-          case 8:
-            response.Say("Time to record something, press any key when you are done.", new { voice = "woman" });
-            response.Record(new { action = "/IVRMain/SaveRecording" });
-            break;
-          case 9:
-            var recordings = profileManager.GetRecordingUrls();
-
-            if (recordings.Count == 0)
-            {
-              response.Say("You have no recorded messages.");
-            }
-            else
-            {
-              response.Say(string.Format("You have {0} recorded message{1}", recordings.Count, (recordings.Count == 1) ? "" : "s"));
-              foreach (var recording in recordings)
-              {
-                response.Play(recording);
-              }
-            }
-            break;
           default:
             break;
         }
@@ -113,23 +91,6 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
 
       return response;
     }
-
-
-    public TwilioResponse SaveRecording(VoiceRequest request)
-    {
-      var url = request.RecordingUrl;
-
-      profileManager.SaveRecording(url);
-
-      var response = new TwilioResponse();
-
-      response.Say("Thank you. The recording has been saved.");
-
-      response.Redirect("/IVRMain/MainMenu");
-
-      return response;
-    }
-
 
     public TwilioResponse ListFavourites(VoiceRequest request, int profileId)
     {

@@ -44,15 +44,6 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     }
 
     [HttpPost]
-    public ActionResult SaveRecording(VoiceRequest request)
-    {
-      var response = ivrMainLogic.SaveRecording(request);
-
-      Response.ContentType = "text/xml";
-      return Content(response.Element.ToString());
-    }
-
-    [HttpPost]
     public ActionResult SendFavMessage_ListFavs(VoiceRequest request, int profileId)
     {
       var response = ivrMainLogic.ListFavourites(request, profileId);
