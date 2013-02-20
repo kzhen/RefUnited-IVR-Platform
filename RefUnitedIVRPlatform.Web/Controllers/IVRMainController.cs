@@ -44,9 +44,9 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     }
 
     [HttpPost]
-    public ActionResult SendFavMessage_ListFavs(VoiceRequest request, int profileId)
+    public ActionResult SendFavMessage_ListFavs(VoiceRequest request, int profileId, int? pageIdx)
     {
-      var response = ivrMainLogic.ListFavourites(request, profileId);
+      var response = ivrMainLogic.ListFavourites(request, profileId, pageIdx);
 
       Response.ContentType = "text/xml";
       return Content(response.Element.ToString());

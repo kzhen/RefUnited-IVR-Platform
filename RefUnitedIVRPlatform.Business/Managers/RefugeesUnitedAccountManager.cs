@@ -11,6 +11,8 @@ namespace RefUnitedIVRPlatform.Business.Managers
 {
   public class RefugeesUnitedAccountManager : IRefugeesUnitedAccountManager
   {
+    private static int FAVOURITE_PAGE_SIZE = 9;
+
     private ApiRequestSettings apiRequestSettings = new ApiRequestSettings()
     {
     };
@@ -49,15 +51,28 @@ namespace RefUnitedIVRPlatform.Business.Managers
       return result.UnreadMessages;
     }
 
-    public List<Profile> GetFavourites(int profileId)
+    public List<Profile> GetFavourites(int profileId, int pageIdx)
     {
       ApiRequest request = new ApiRequest(apiRequestSettings);
 
       var results = request.GetFavourites(profileId);
 
+      if (results.Count > FAVOURITE_PAGE_SIZE)
+      {
+        if (pageIdx == 0)
+        {
+          return results.Take(FAVOURITE_PAGE_SIZE).ToList();
+        }
+        else
+        {
+          int numToSkip = FAVOURITE_PAGE_SIZE * pageIdx;
+
+          return results.Skip(numToSkip).Take(FAVOURITE_PAGE_SIZE).ToList();
+        }
+      }
+
       return results;
     }
-
 
     public ProfileMessageCollection GetMessages(int profileId)
     {

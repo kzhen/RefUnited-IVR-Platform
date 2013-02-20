@@ -13,7 +13,7 @@ namespace RefUnitedIVRPlatform.Common.Interfaces
     TwilioResponse GetMainMenu();
     TwilioResponse GetMenuSelection(VoiceRequest request);
 
-    TwilioResponse ListFavourites(VoiceRequest request, int profileId);
+    TwilioResponse ListFavourites(VoiceRequest request, int profileId, int? pageIdx);
     TwilioResponse RecordMessageForFavourite(VoiceRequest request, int profileId, string favs);
     TwilioResponse SaveRecordingForFavourite(VoiceRequest request, int profileId, int targetProfileId);
 

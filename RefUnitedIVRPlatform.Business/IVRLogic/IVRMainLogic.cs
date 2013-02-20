@@ -79,13 +79,18 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       return response;
     }
 
-    public TwilioResponse ListFavourites(VoiceRequest request, int profileId)
+    public TwilioResponse ListFavourites(VoiceRequest request, int profileId, int? pageIdx)
     {
       var response = new TwilioResponse();
 
       response.Say("Listing favourites");
 
-      var favourites = refUnitedAcctManager.GetFavourites(profileId);
+      if (!pageIdx.HasValue)
+      {
+        pageIdx = 0;
+      }
+
+      var favourites = refUnitedAcctManager.GetFavourites(profileId, pageIdx.Value);
 
       if (favourites.Count == 0)
       {
