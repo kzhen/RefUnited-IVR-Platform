@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Twilio.Mvc;
 using Twilio.TwiML;
+using RefUnitedIVRPlatform.Common;
 
 namespace RefUnitedIVRPlatform.Business.IVRLogic
 {
@@ -36,23 +37,13 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       return response;
     }
 
-
     public TwilioResponse GetMenuSelection(VoiceRequest request)
     {
       var response = new TwilioResponse();
 
       try
       {
-        string lookupPhoneNumber = string.Empty;
-
-        if (request.Direction.Equals("inbound"))
-        {
-          lookupPhoneNumber = request.From;
-        }
-        else if (request.Direction.Equals("outbound-api"))
-        {
-          lookupPhoneNumber = request.To;
-        }
+        string lookupPhoneNumber = request.GetOriginatingNumber();
 
         int profileId = profileManager.GetProfileId(lookupPhoneNumber);
 
@@ -61,7 +52,6 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
         switch (selection)
         {
           case 1:
-            //listen to unread messages...
             response.Say("Looking up unread messages.");
             var unreadCount = refUnitedAcctManager.GetUnreadMessageCount(profileId);
             response.Say(string.Format("You have {0} message{1}", unreadCount, (unreadCount == 1) ? "" : "s"));
@@ -79,13 +69,10 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
           default:
             break;
         }
-
         response.Redirect("/IVRMain/MainMenu");
       }
       catch (Exception ex)
       {
-        response.Say("an error has occured. " + ex.Message);
-        response.Say("an error has occured. " + ex.Message);
         response.Say("an error has occured. " + ex.Message);
       }
 
@@ -140,7 +127,6 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       return response;
     }
 
-
     public TwilioResponse RecordMessageForFavourite(VoiceRequest request, int profileId, string favs)
     {
       var response = new TwilioResponse();
@@ -172,7 +158,6 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
 
       return response;
     }
-
 
     public TwilioResponse SaveRecordingForFavourite(VoiceRequest request, int profileId, int targetProfileId)
     {
@@ -247,7 +232,6 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       return response;
     }
 
-
     public TwilioResponse PlayRecordedVoiceMessageSelection(VoiceRequest request, int profileId, int recordingIdx, int fromProfileId)
     {
       var response = new TwilioResponse();
@@ -275,7 +259,6 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       return response;
     }
 
-
     public TwilioResponse SaveVoiceMessageReply(VoiceRequest request, int profileId, int recordingIdx, int fromProfileId)
     {
       var response = new TwilioResponse();
@@ -288,7 +271,6 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
 
       return response;
     }
-
 
     public TwilioResponse PlayPlatformMessages(VoiceRequest request, int profileId)
     {

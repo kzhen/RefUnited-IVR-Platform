@@ -1,4 +1,5 @@
 ﻿using RefUnitedIVRPlatform.Common.Interfaces;
+using RefUnitedIVRPlatform.Common;
 using RefUnitedIVRPlatform.Resources;
 using System;
 using System.Collections.Generic;
@@ -27,16 +28,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       
       try
       {
-        string lookupPhoneNumber = string.Empty;
-
-        if (request.Direction.Equals("inbound"))
-        {
-          lookupPhoneNumber = request.From;
-        }
-        else if (request.Direction.Equals("outbound-api"))
-        {
-          lookupPhoneNumber = request.To;
-        }
+        var lookupPhoneNumber = request.GetOriginatingNumber();
 
         var knownNumber = profileManager.CheckNumber(lookupPhoneNumber);
 
