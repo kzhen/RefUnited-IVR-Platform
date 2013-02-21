@@ -83,8 +83,6 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
     {
       var response = new TwilioResponse();
 
-      response.Say("Listing favourites");
-
       if (!pageIdx.HasValue)
       {
         pageIdx = 0;
@@ -92,11 +90,15 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
 
       var favourites = refUnitedAcctManager.GetFavourites(profileId, pageIdx.Value);
 
-      if (favourites.Count == 0)
+      if (favourites == null || favourites.Count == 0)
       {
         response.Say("You have no favourites to send voice messages to.");
         response.Redirect("/IVRMain/MainMenu");
+
+        return response;
       }
+
+      response.Say("Listing favourites");
 
       StringBuilder sb = new StringBuilder();
 
@@ -110,11 +112,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
 
       response.BeginGather(new { numDigits = 1, action = string.Format("/IVRMain/SendFavMessage_RecordMsg?profileId={0}&favs={1}", profileId, favs) });
 
-      //TODO: add paging support!
-
-      int max = (favourites.Count <= 9) ? favourites.Count : 9;
-
-      for (int i = 1; i <= max; i++)
+      for (int i = 1; i <= favourites.Count; i++)
       {
         var fav = favourites[i - 1];
         response.Say(string.Format("To send a message to {0} {1} press {2}", fav.FirstName, fav.Surname, i));
