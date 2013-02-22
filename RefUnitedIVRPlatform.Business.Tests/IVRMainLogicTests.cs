@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using RefUnitedIVRPlatform.Business.Managers;
 using RefugeesUnitedApi;
+using Twilio.Mvc;
 
 namespace RefUnitedIVRPlatform.Business.Tests
 {
@@ -14,12 +15,42 @@ namespace RefUnitedIVRPlatform.Business.Tests
   public class IVRMainLogicTests
   {
     [TestClass]
+    public class RecordMessageForFavouriteTests
+    {
+      private static string twilioRedirectToNextPage = "<Redirect>/IVRMain/SendFavMessage_ListFavs?profileId={0}&amp;pageIdx={1}</Redirect>";
+
+      [TestMethod]
+      public void ShouldReturnTwilioResponseRedirectingToNextPage()
+      {
+        //Arrange
+        var profileId = 324784;
+        var profileManager = new Mock<IProfileManager>();
+        var apiRequest = new Mock<IApiRequest>();
+        var refUnitedAcctMaanger = new RefugeesUnitedAccountManager(apiRequest.Object);
+
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctMaanger);
+
+        string favs = string.Empty;
+        int pageIdx = 0;
+
+        var voiceRequest = new VoiceRequest() { Digits = "#" };
+
+        //Act
+        var response = logic.RecordMessageForFavourite(voiceRequest, profileId, favs, pageIdx);
+
+        //Assert
+        Assert.IsNotNull(response);
+        Assert.AreEqual(string.Format(twilioRedirectToNextPage, profileId, pageIdx + 1), response.Element.FirstNode.ToString());
+      }
+    }
+
+    [TestClass]
     public class ListFavouritesTests
     {
       private static string twilioSayNoFavourites = "<Say>You have no favourites to send voice messages to.</Say>";
       private static string twilioRedirect = "<Redirect>/IVRMain/MainMenu</Redirect>";
       private static string twilioSayListingFavourites = "<Say>Listing favourites</Say>";
-      private static string twilioGatherFavouriteListResponse = "<Gather numDigits=\"1\" action=\"/IVRMain/SendFavMessage_RecordMsg?profileId={0}&amp;favs={1}\">\r\n{2}  <Say>Press star to return to main menu</Say>\r\n</Gather>";
+      private static string twilioGatherFavouriteListResponse = "<Gather numDigits=\"1\" action=\"/IVRMain/SendFavMessage_RecordMsg?profileId={0}&amp;favs={1}&amp;pageIdx={2}\">\r\n{3}  <Say>Press star to return to main menu</Say>\r\n</Gather>";
 
       [TestMethod]
       public void ShouldReturnTwilioResponseWithThreeFavouritesFromPage2WhenTwelveFavourites()
@@ -28,6 +59,9 @@ namespace RefUnitedIVRPlatform.Business.Tests
         var profileManager = new Mock<IProfileManager>();
         var apiRequest = new Mock<IApiRequest>();
         var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
+
+        //this is what we are testing!
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
 
         var favs = new List<RefugeesUnitedApi.ApiEntities.Profile>();
 
@@ -56,13 +90,13 @@ namespace RefUnitedIVRPlatform.Business.Tests
 
         apiRequest.Setup(m => m.GetFavourites(profileId)).Returns(favs);
 
-        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
+        
 
         var response = logic.ListFavourites(new Twilio.Mvc.VoiceRequest(), profileId, 1);
 
         Assert.IsNotNull(response);
         Assert.AreEqual(twilioSayListingFavourites, response.Element.FirstNode.ToString());
-        Assert.AreEqual(string.Format(twilioGatherFavouriteListResponse, profileId, favsId, favsSaySb.ToString()), response.Element.LastNode.ToString());
+        Assert.AreEqual(string.Format(twilioGatherFavouriteListResponse, profileId, favsId, 1, favsSaySb.ToString()), response.Element.LastNode.ToString());
       }
 
       [TestMethod]
@@ -96,7 +130,7 @@ namespace RefUnitedIVRPlatform.Business.Tests
 
         Assert.IsNotNull(response);
         Assert.AreEqual(twilioSayListingFavourites, response.Element.FirstNode.ToString());
-        Assert.AreEqual(string.Format(twilioGatherFavouriteListResponse, profileId, favsId, favsSaySb.ToString()), response.Element.LastNode.ToString());
+        Assert.AreEqual(string.Format(twilioGatherFavouriteListResponse, profileId, favsId, 0, favsSaySb.ToString()), response.Element.LastNode.ToString());
       }
 
       [TestMethod]
