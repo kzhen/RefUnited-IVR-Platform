@@ -99,10 +99,10 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       }
 
       response.Say("Listing favourites");
+
       string favs = string.Join(",", favourites.Select(f => f.ProfileId).ToList());
 
-
-      response.BeginGather(new { numDigits = 1, action = string.Format("/IVRMain/SendFavMessage_RecordMsg?profileId={0}&favs={1}", profileId, favs) });
+      response.BeginGather(new { numDigits = 1, action = string.Format("/IVRMain/SendFavMessage_RecordMsg?profileId={0}&favs={1}&pageIdx={2}", profileId, favs, pageIdx.Value) });
 
       for (int i = 1; i <= favourites.Count; i++)
       {
@@ -122,7 +122,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       return response;
     }
 
-    public TwilioResponse RecordMessageForFavourite(VoiceRequest request, int profileId, string favs)
+    public TwilioResponse RecordMessageForFavourite(VoiceRequest request, int profileId, string favs, int pageIdx)
     {
       var response = new TwilioResponse();
 
@@ -130,11 +130,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
 
       if (request.Digits.Equals("#"))
       {
-        //goto next page...
-        //implement
-        response.Say("This is no yet implemented. Sorry!");
-        response.Redirect("/IVRMain/MainMenu");
-
+        response.Redirect(string.Format("/IVRMain/SendFavMessage_ListFavs?profileId={0}&pageIdx={1}", profileId, ++pageIdx));
         return response;
       }
       else if (request.Digits.Equals("*"))
