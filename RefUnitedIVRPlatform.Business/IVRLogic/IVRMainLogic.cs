@@ -99,16 +99,8 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       }
 
       response.Say("Listing favourites");
+      string favs = string.Join(",", favourites.Select(f => f.ProfileId).ToList());
 
-      StringBuilder sb = new StringBuilder();
-
-      favourites.ForEach(x =>
-      {
-        sb.Append(x.ProfileId);
-        sb.Append(",");
-      });
-
-      string favs = sb.ToString().Substring(0, sb.Length - 1);
 
       response.BeginGather(new { numDigits = 1, action = string.Format("/IVRMain/SendFavMessage_RecordMsg?profileId={0}&favs={1}", profileId, favs) });
 
