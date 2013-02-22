@@ -14,6 +14,7 @@ using RefUnitedIVRPlatform.Business.IVRLogic;
 using RefUnitedIVRPlatform.Business.Managers;
 using RefUnitedIVRPlatform.Data.Repositories;
 using RefugeesUnitedApi;
+using RefUnitedIVRPlatform.Business.SMSReceiverLogic;
 
 namespace RefUnitedIVRPlatform.Web
 {
@@ -38,6 +39,8 @@ namespace RefUnitedIVRPlatform.Web
 
       builder.Register<IRefugeesUnitedAccountManager>(m => new RefugeesUnitedAccountManager(m.Resolve<IApiRequest>())).InstancePerHttpRequest();
       builder.Register<IProfileManager>(m => new ProfileManager(m.Resolve<IProfileRepository>())).SingleInstance();
+      
+      builder.Register<ISMSReceiverLogic>(m=>new SMSReceiverLogic("", "", "")).InstancePerHttpRequest();
 
       builder.Register<IIVREntryLogic>(m => new IVREntryLogic(m.Resolve<IProfileManager>())).InstancePerHttpRequest();
       builder.Register<IIVRMainLogic>(m => new IVRMainLogic(m.Resolve<IProfileManager>(), m.Resolve<IRefugeesUnitedAccountManager>()));
