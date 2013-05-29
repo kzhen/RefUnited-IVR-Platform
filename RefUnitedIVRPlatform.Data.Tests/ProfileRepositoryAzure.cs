@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RefUnitedIVRPlatform.Common.Entities
+namespace RefUnitedIVRPlatform.Data.Tests
 {
-  public class Profile
+  public class ProfileRepositoryAzureTests
   {
   }
 }

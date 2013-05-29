@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{138ECE08-5A78-409F-9F21-25B3E18B679D}</ProjectGuid>
+    <ProjectGuid>{21802CF5-3D07-4184-98BB-1EA7ADBD3397}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RefUnitedIVRPlatform.Common</RootNamespace>
-    <AssemblyName>RefUnitedIVRPlatform.Common</AssemblyName>
+    <RootNamespace>RefUnitedIVRPlatform.Data.Tests</RootNamespace>
+    <AssemblyName>RefUnitedIVRPlatform.Data.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -32,48 +32,45 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Data.Edm, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Data.Edm.5.2.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp">
-      <HintPath>..\packages\RestSharp.104.1\lib\net4\RestSharp.dll</HintPath>
+    <Reference Include="Microsoft.Data.OData, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.OData.5.2.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.1.8.0.0\lib\net35-full\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.Storage.2.0.5.1\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.Spatial, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Spatial.5.2.0\lib\net40\System.Spatial.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Twilio.Api">
-      <HintPath>..\packages\Twilio.3.5.6\lib\3.5\Twilio.Api.dll</HintPath>
-    </Reference>
-    <Reference Include="Twilio.Mvc">
-      <HintPath>..\packages\Twilio.Mvc.3.1.10\lib\3.5\Twilio.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="Twilio.Twiml">
-      <HintPath>..\packages\Twilio.TwiML.3.2.0\lib\3.5\Twilio.Twiml.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\IVRProfile.cs" />
-    <Compile Include="Entities\Recording.cs" />
-    <Compile Include="Interfaces\IIVRAuthenticateLogic.cs" />
-    <Compile Include="Interfaces\IIVREntryLogic.cs" />
-    <Compile Include="Interfaces\IIVRMainLogic.cs" />
-    <Compile Include="Interfaces\IProfileManager.cs" />
-    <Compile Include="Interfaces\IProfileRepository.cs" />
-    <Compile Include="Interfaces\IRefugeesUnitedAccountManager.cs" />
-    <Compile Include="Interfaces\IRepository.cs" />
-    <Compile Include="Interfaces\ISMSReceiverLogic.cs" />
+    <Compile Include="ProfileRepositoryAzure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VoiceRequestExtensionMethods.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\refunited-dotnet-client\RefugeesUnitedApi\RefugeesUnitedApi.csproj">
-      <Project>{e6ef07c8-901e-407c-949f-d08fbb40b78b}</Project>
-      <Name>RefugeesUnitedApi</Name>
+    <ProjectReference Include="..\RefUnitedIVRPlatform.Common\RefUnitedIVRPlatform.Common.csproj">
+      <Project>{138ece08-5a78-409f-9f21-25b3e18b679d}</Project>
+      <Name>RefUnitedIVRPlatform.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RefUnitedIVRPlatform.Data\RefUnitedIVRPlatform.Data.csproj">
+      <Project>{02315ae5-d021-4ec1-b672-8146939ccf41}</Project>
+      <Name>RefUnitedIVRPlatform.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

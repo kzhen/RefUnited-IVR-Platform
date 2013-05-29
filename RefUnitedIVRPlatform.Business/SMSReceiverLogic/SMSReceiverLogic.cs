@@ -12,9 +12,9 @@ namespace RefUnitedIVRPlatform.Business.SMSReceiverLogic
 {
   public class SMSReceiverLogic : ISMSReceiverLogic
   {
-    private string accountSid = "";
-    private string authToken = "";
-    private string twilioPhoneNumber = "";
+    private string accountSid = string.Empty;
+    private string authToken = string.Empty;
+    private string twilioPhoneNumber = string.Empty;
 
     public SMSReceiverLogic(string accountSid, string authToken, string twilioPhoneNumber)
     {
