@@ -1,4 +1,11 @@
 #################
+## Custom
+#################
+
+## Sensitive API settings go in here
+RefUnitedApiSettings.config
+
+#################
 ## Eclipse
 #################
 

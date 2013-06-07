@@ -232,8 +232,10 @@
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="RefUnitedApiSettings.template.config" />
     <None Include="Properties\PublishProfiles\refuniteivr - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\refuniteivr - Web Deploy.pubxml" />
+    <Content Include="RefUnitedApiSettings.config" />
     <None Include="Scripts\jquery-1.9.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -342,7 +344,9 @@
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
-  </Target>
+  </Target>-->
   <Target Name="AfterBuild">
-  </Target> -->
+    <Copy SourceFiles="RefUnitedApiSettings.template.config" DestinationFiles="RefUnitedApiSettings.config" SkipUnchangedFiles="true" Condition="!Exists('RefUnitedApiSettings.config')">
+    </Copy>
+  </Target>
 </Project>
