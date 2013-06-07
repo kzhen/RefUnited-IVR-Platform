@@ -22,7 +22,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefUnitedIVRPlatform.Resour
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefUnitedIVRPlatform.Business.Tests", "RefUnitedIVRPlatform.Business.Tests\RefUnitedIVRPlatform.Business.Tests.csproj", "{74F7244D-D0B2-4B90-A441-C9FFFC80F646}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefUnitedIVRPlatform.Data.Tests", "RefUnitedIVRPlatform.Data.Tests\RefUnitedIVRPlatform.Data.Tests.csproj", "{21802CF5-3D07-4184-98BB-1EA7ADBD3397}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefUnitedIVRPlatform.Data.Tests", "RefUnitedIVRPlatform.Data.Tests\RefUnitedIVRPlatform.Data.Tests.csproj", "{0B50A8B9-50A0-4FDC-8689-73A1E36FBA83}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefUnitedIVRPlatform.Common.Tests", "RefUnitedIVRPlatform.Common.Tests\RefUnitedIVRPlatform.Common.Tests.csproj", "{5671D464-A95D-4053-9340-C2E7E9305BE9}"
 EndProject
@@ -68,6 +68,10 @@ Global
 		{5671D464-A95D-4053-9340-C2E7E9305BE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5671D464-A95D-4053-9340-C2E7E9305BE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5671D464-A95D-4053-9340-C2E7E9305BE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B50A8B9-50A0-4FDC-8689-73A1E36FBA83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B50A8B9-50A0-4FDC-8689-73A1E36FBA83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B50A8B9-50A0-4FDC-8689-73A1E36FBA83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B50A8B9-50A0-4FDC-8689-73A1E36FBA83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
