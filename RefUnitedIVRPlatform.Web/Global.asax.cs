@@ -15,6 +15,7 @@ using RefUnitedIVRPlatform.Business.Managers;
 using RefUnitedIVRPlatform.Data.Repositories;
 using RefugeesUnitedApi;
 using RefUnitedIVRPlatform.Business.SMSReceiverLogic;
+using System.Configuration;
 
 namespace RefUnitedIVRPlatform.Web
 {
@@ -29,9 +30,9 @@ namespace RefUnitedIVRPlatform.Web
 
       var apiRequestSettings = new ApiRequestSettings()
       {
-        Host = "",
-        UserName = "",
-        Password = ""
+        Host = ConfigurationManager.AppSettings["RefUnitedApiHostName"],
+        UserName = ConfigurationManager.AppSettings["RefUnitedApiUserName"],
+        Password = ConfigurationManager.AppSettings["RefUnitedApiPassword"]
       };
 
       builder.Register<IApiRequest>(m => new ApiRequest(apiRequestSettings)).InstancePerHttpRequest();
