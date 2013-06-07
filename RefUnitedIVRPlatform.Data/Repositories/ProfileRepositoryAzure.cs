@@ -22,7 +22,8 @@ namespace RefUnitedIVRPlatform.Data.Repositories
 
     public ProfileRepositoryAzure(string connectionString)
     {
-      this.storageAccount = CloudStorageAccount.Parse(connectionString);
+      //this.storageAccount = CloudStorageAccount.Parse(connectionString);
+      this.storageAccount = CloudStorageAccount.DevelopmentStorageAccount;
       this.tableClient = storageAccount.CreateCloudTableClient();
       CheckAndCreateStorage();
     }
@@ -40,7 +41,18 @@ namespace RefUnitedIVRPlatform.Data.Repositories
 
     public IVRProfile Get(int id)
     {
-      throw new NotImplementedException();
+      string partitionKey = id.ToString().Substring(0, 2);
+      string rowKey = id.ToString();
+
+      TableOperation getOperation = TableOperation.Retrieve<IVRProfileEntity>(partitionKey, rowKey);
+
+      var result = profilesTable.Execute(getOperation);
+
+      var entity = (IVRProfileEntity)result.Result;
+
+      var returnValue = IVRProfileToEntityMapper.ConvertFromEntity(entity);
+
+      return returnValue;
     }
 
     public IVRProfile Create(IVRProfile item)
@@ -50,12 +62,31 @@ namespace RefUnitedIVRPlatform.Data.Repositories
       TableOperation insertOperation = TableOperation.Insert(entity);
       var result = profilesTable.Execute(insertOperation);
 
-      throw new NotImplementedException();
+
+      IVRProfileEntity entityResult = (IVRProfileEntity)result.Result;
+
+      return IVRProfileToEntityMapper.ConvertFromEntity(entityResult);
     }
+
 
     public bool Delete(IVRProfile item)
     {
-      throw new NotImplementedException();
+      //Azure storage will throw a StorageException --- 404 --- if it cannot find the entity to delete.
+
+      var entity = IVRProfileToEntityMapper.ConvertToEntity(item);
+
+      TableOperation deleteOperation = TableOperation.Delete(entity);
+
+      try
+      {
+        var result = profilesTable.Execute(deleteOperation);
+
+        return true;
+      }
+      catch (StorageException)
+      {
+        return false;
+      }
     }
 
     public List<IVRProfile> GetAll()

@@ -24,5 +24,19 @@ namespace RefUnitedIVRPlatform.Data.DtoConverter
 
       return ret;
     }
+
+    internal static IVRProfile ConvertFromEntity(IVRProfileEntity entity)
+    {
+      IVRProfile ret = new IVRProfile()
+      {
+        FullName = entity.FullName,
+        Culture = entity.Culture,
+        ProfileId = entity.ProfileId,
+        PhoneNumber = entity.PhoneNumber,
+        PIN = entity.PIN
+      };
+
+      return ret;
+    }
   }
 }
