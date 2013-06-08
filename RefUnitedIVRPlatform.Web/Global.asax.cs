@@ -35,6 +35,10 @@ namespace RefUnitedIVRPlatform.Web
         Password = ConfigurationManager.AppSettings["RefUnitedApiPassword"]
       };
 
+      string twilioAccountSid = ConfigurationManager.AppSettings["TwilioAccountSid"];
+      string twilioAuthToken = ConfigurationManager.AppSettings["TwilioAuthToken"];
+      string twilioPhoneNumber = ConfigurationManager.AppSettings["TwilioPhoneNumber"];
+
       var azureTableStorageConnectionString = ConfigurationManager.AppSettings["AzureTableStorageConnectionString"];
 
       builder.Register<IApiRequest>(m => new ApiRequest(apiRequestSettings)).InstancePerHttpRequest();
@@ -43,7 +47,7 @@ namespace RefUnitedIVRPlatform.Web
       builder.Register<IRefugeesUnitedAccountManager>(m => new RefugeesUnitedAccountManager(m.Resolve<IApiRequest>())).InstancePerHttpRequest();
       builder.Register<IProfileManager>(m => new ProfileManager(m.Resolve<IProfileRepository>())).SingleInstance();
       
-      builder.Register<ISMSReceiverLogic>(m=>new SMSReceiverLogic("", "", "")).InstancePerHttpRequest();
+      builder.Register<ISMSReceiverLogic>(m=>new SMSReceiverLogic(twilioAccountSid, twilioAuthToken, twilioPhoneNumber)).InstancePerHttpRequest();
 
       builder.Register<IIVREntryLogic>(m => new IVREntryLogic(m.Resolve<IProfileManager>())).InstancePerHttpRequest();
       builder.Register<IIVRMainLogic>(m => new IVRMainLogic(m.Resolve<IProfileManager>(), m.Resolve<IRefugeesUnitedAccountManager>()));

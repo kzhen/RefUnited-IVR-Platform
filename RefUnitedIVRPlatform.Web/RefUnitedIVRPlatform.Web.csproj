@@ -232,10 +232,14 @@
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="RefUnitedApiSettings.template.config" />
+    <Content Include="RefUnitedApiSettings.template.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Properties\PublishProfiles\refuniteivr - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\refuniteivr - Web Deploy.pubxml" />
-    <Content Include="RefUnitedApiSettings.config" />
+    <Content Include="RefUnitedApiSettings.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Scripts\jquery-1.9.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
