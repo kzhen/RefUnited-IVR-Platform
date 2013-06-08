@@ -19,7 +19,8 @@ namespace RefUnitedIVRPlatform.Data.DtoConverter
         ProfileId = profile.ProfileId,
         PhoneNumber = profile.PhoneNumber,
         PIN = profile.PIN,
-
+        RowKey = profile.ProfileId.ToString(),
+        PartitionKey = (profile.ProfileId).ToString().Substring(0, 2)
       };
 
       return ret;

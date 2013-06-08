@@ -75,11 +75,22 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AzureStorageTests.cs" />
+    <Compile Include="ProfileRepositoryAzureIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RefUnitedIVRPlatform.Common\RefUnitedIVRPlatform.Common.csproj">
+      <Project>{138ece08-5a78-409f-9f21-25b3e18b679d}</Project>
+      <Name>RefUnitedIVRPlatform.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RefUnitedIVRPlatform.Data\RefUnitedIVRPlatform.Data.csproj">
+      <Project>{02315ae5-d021-4ec1-b672-8146939ccf41}</Project>
+      <Name>RefUnitedIVRPlatform.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

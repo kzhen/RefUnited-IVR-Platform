@@ -20,17 +20,26 @@ namespace RefUnitedIVRPlatform.Data.Repositories
     private CloudTableClient tableClient;
     private CloudTable profilesTable;
 
+    private const string AZURE_IVRPROFILE_TABLE = "ivrProfile";
+
     public ProfileRepositoryAzure(string connectionString)
     {
-      //this.storageAccount = CloudStorageAccount.Parse(connectionString);
-      this.storageAccount = CloudStorageAccount.DevelopmentStorageAccount;
+      if (connectionString.Equals("DEVELOPMENT_CONNECTION"))
+      {
+        this.storageAccount = CloudStorageAccount.DevelopmentStorageAccount;
+      }
+      else
+      {
+        this.storageAccount = CloudStorageAccount.Parse(connectionString);
+      }
+      
       this.tableClient = storageAccount.CreateCloudTableClient();
       CheckAndCreateStorage();
     }
 
     private void CheckAndCreateStorage()
     {
-      this.profilesTable = tableClient.GetTableReference("ivrProfile");
+      this.profilesTable = tableClient.GetTableReference(AZURE_IVRPROFILE_TABLE);
       profilesTable.CreateIfNotExists();
     }
 
