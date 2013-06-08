@@ -16,7 +16,7 @@ namespace RefUnitedIVRPlatform.Data.DtoEntities
     public string PIN { get; set; }
     public string Culture { get; set; }
 
-    internal IVRProfileEntity()
+    public IVRProfileEntity()
     {
       this.PartitionKey = FullName;
       this.RowKey = ProfileId.ToString();
