@@ -45,7 +45,14 @@ namespace RefUnitedIVRPlatform.Data.Repositories
 
     public IVRProfile GetByPhoneNumber(string lookupPhoneNumber)
     {
-      throw new NotImplementedException();
+      TableQuery<IVRProfileEntity> query = new TableQuery<IVRProfileEntity>().Where(
+        TableQuery.GenerateFilterCondition("PhoneNumber", QueryComparisons.Equal, lookupPhoneNumber));
+
+      var results = profilesTable.ExecuteQuery<IVRProfileEntity>(query).First();
+
+      var profile = IVRProfileToEntityMapper.ConvertFromEntity(results);
+
+      return profile;
     }
 
     public IVRProfile Get(int id)
@@ -83,6 +90,8 @@ namespace RefUnitedIVRPlatform.Data.Repositories
       //Azure storage will throw a StorageException --- 404 --- if it cannot find the entity to delete.
 
       var entity = IVRProfileToEntityMapper.ConvertToEntity(item);
+
+      entity.ETag = "*";
 
       TableOperation deleteOperation = TableOperation.Delete(entity);
 
