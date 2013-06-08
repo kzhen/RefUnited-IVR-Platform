@@ -39,5 +39,12 @@ namespace RefUnitedIVRPlatform.Data.DtoConverter
 
       return ret;
     }
+
+    internal static void UpdateEntity(IVRProfileEntity entityToUpdate, IVRProfileEntity profileEntity)
+    {
+      entityToUpdate.Culture = profileEntity.Culture;
+      entityToUpdate.PhoneNumber = profileEntity.PhoneNumber;
+      entityToUpdate.PIN = profileEntity.PIN;
+    }
   }
 }
