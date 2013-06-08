@@ -43,6 +43,9 @@ namespace RefUnitedIVRPlatform.Data.Tests
 
       entityToCreate.PartitionKey = entityToCreate.LastName;
       entityToCreate.RowKey = entityToCreate.ID;
+
+      var op = TableOperation.Insert(entityToCreate);
+      table1.Execute(op);
     }
 
     [TestMethod]
@@ -101,13 +104,9 @@ namespace RefUnitedIVRPlatform.Data.Tests
 
       TableOperation deleteOperation = TableOperation.Delete(entityToCreate);
 
-      var deletResult = table1.Execute(deleteOperation);
+      var deleteResult = table1.Execute(deleteOperation);
 
-      entityToCreate.PartitionKey = "1234";
-      entityToCreate.RowKey = "9999";
-      TableOperation deleteOperation2 = TableOperation.Delete(entityToCreate);
-
-      var deletResult2 = table1.Execute(deleteOperation2);
+      Assert.AreEqual(204, deleteResult.HttpStatusCode);
     }
   }
 }
