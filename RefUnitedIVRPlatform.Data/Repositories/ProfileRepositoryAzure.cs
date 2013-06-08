@@ -109,12 +109,37 @@ namespace RefUnitedIVRPlatform.Data.Repositories
 
     public List<IVRProfile> GetAll()
     {
-      throw new NotImplementedException();
+      var query = new TableQuery<IVRProfileEntity>();
+
+      var results = profilesTable.ExecuteQuery(query).Select<IVRProfileEntity, IVRProfile>(x =>
+        {
+          return IVRProfileToEntityMapper.ConvertFromEntity(x);
+        }).ToList();
+
+      return results;
     }
 
-    public IVRProfile Update(IVRProfile profile)
+    public bool Update(IVRProfile profile)
     {
-      throw new NotImplementedException();
+      var profileEntity = IVRProfileToEntityMapper.ConvertToEntity(profile);
+
+      TableOperation retrievalOperation = TableOperation.Retrieve<IVRProfileEntity>(profileEntity.PartitionKey, profileEntity.RowKey);
+
+      var retrievalResult = profilesTable.Execute(retrievalOperation);
+
+      var entityToUpdate = (IVRProfileEntity)retrievalResult.Result;
+
+      if (entityToUpdate != null)
+      {
+        IVRProfileToEntityMapper.UpdateEntity(entityToUpdate, profileEntity);
+
+        TableOperation updateOperation = TableOperation.Replace(entityToUpdate);
+        var updateResult = profilesTable.Execute(updateOperation);
+
+        return true;
+      }
+      
+      return false;
     }
   }
 }

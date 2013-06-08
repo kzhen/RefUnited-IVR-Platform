@@ -170,5 +170,59 @@ namespace RefUnitedIVRPlatform.Data.Tests
         Assert.AreEqual(phoneNumberToLookup, userPorfile.PhoneNumber);
       }
     }
+
+    [TestClass]
+    public class GetAllTests
+    {
+      [TestMethod]
+      public void ShouldReturnAllEntities()
+      {
+        ProfileRepositoryAzure repository = new ProfileRepositoryAzure(DEVELOPMENT_CONNECTION_STRING);
+
+        var allProfiles = repository.GetAll();
+
+        Assert.AreEqual(1, allProfiles.Count);
+      }
+    }
+
+    [TestClass]
+    public class UpdateTests
+    {
+      [TestMethod]
+      public void ShouldUpdateProfile()
+      {
+        IVRProfile profile = new IVRProfile()
+        {
+          ProfileId = 11112,
+          Culture = "en",
+          PIN = "1234",
+          FullName = "Basil",
+          PhoneNumber = "+22222221"
+        };
+
+        ProfileRepositoryAzure repository = new ProfileRepositoryAzure(DEVELOPMENT_CONNECTION_STRING);
+
+        var createdEntity = repository.Create(profile);
+
+        createdEntity.Culture = "fr";
+        createdEntity.PhoneNumber = "+1111112";
+        createdEntity.PIN = "4321";
+
+        repository.Update(createdEntity);
+
+        var updatedEntity = repository.Get(11112);
+
+        Assert.AreEqual(createdEntity.Culture, updatedEntity.Culture);
+        Assert.AreEqual(createdEntity.PhoneNumber, updatedEntity.PhoneNumber);
+        Assert.AreEqual(createdEntity.PIN, updatedEntity.PIN);
+      }
+
+      [TestMethod]
+      [Ignore]
+      public void ShouldReturnFalseWhenCannotUpdateProfile()
+      {
+        
+      }
+    }
   }
 }
