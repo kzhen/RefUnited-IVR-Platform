@@ -14,7 +14,7 @@ using RefUnitedIVRPlatform.Data.DtoEntities;
 
 namespace RefUnitedIVRPlatform.Data.Repositories
 {
-  public class ProfileRepositoryAzure : IProfileRepository
+  public class ProfileRepository : IProfileRepository
   {
     private CloudStorageAccount storageAccount;
     private CloudTableClient tableClient;
@@ -22,7 +22,7 @@ namespace RefUnitedIVRPlatform.Data.Repositories
 
     private const string AZURE_IVRPROFILE_TABLE = "ivrProfile";
 
-    public ProfileRepositoryAzure(string connectionString)
+    public ProfileRepository(string connectionString)
     {
       if (connectionString.Equals("DEVELOPMENT_CONNECTION"))
       {

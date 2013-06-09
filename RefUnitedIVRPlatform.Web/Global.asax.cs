@@ -42,10 +42,11 @@ namespace RefUnitedIVRPlatform.Web
       var azureTableStorageConnectionString = ConfigurationManager.AppSettings["AzureTableStorageConnectionString"];
 
       builder.Register<IApiRequest>(m => new ApiRequest(apiRequestSettings)).InstancePerHttpRequest();
-      builder.Register<IProfileRepository>(m => new ProfileRepositoryAzure(azureTableStorageConnectionString)).SingleInstance();
+      builder.Register<IProfileRepository>(m => new ProfileRepository(azureTableStorageConnectionString)).SingleInstance();
+      builder.Register<IRecordingRepository>(m => new RecordingRepository(azureTableStorageConnectionString)).SingleInstance();
 
       builder.Register<IRefugeesUnitedAccountManager>(m => new RefugeesUnitedAccountManager(m.Resolve<IApiRequest>())).InstancePerHttpRequest();
-      builder.Register<IProfileManager>(m => new ProfileManager(m.Resolve<IProfileRepository>())).SingleInstance();
+      builder.Register<IProfileManager>(m => new ProfileManager(m.Resolve<IProfileRepository>(), m.Resolve<IRecordingRepository>())).SingleInstance();
       
       builder.Register<ISMSReceiverLogic>(m=>new SMSReceiverLogic(twilioAccountSid, twilioAuthToken, twilioPhoneNumber)).InstancePerHttpRequest();
 

@@ -11,20 +11,17 @@ namespace RefUnitedIVRPlatform.Business.Managers
   public class ProfileManager : IProfileManager
   {
     private List<String> urls;
-    private List<Recording> recordings;
+    //private List<Recording> recordings;
     private IProfileRepository profileRepository;
+    private IRecordingRepository recordingRepository;
 
-    public ProfileManager(IProfileRepository repository)
+    public ProfileManager(IProfileRepository repository, IRecordingRepository recordingRepository)
     {
       urls = new List<string>();
-      recordings = new List<Recording>();
+     // recordings = new List<Recording>();
+      
       this.profileRepository = repository;
-
-      CreateSampleData();
-    }
-
-    private void CreateSampleData()
-    {
+      this.recordingRepository = recordingRepository;
     }
 
     public void CreateProfile(IVRProfile profile)
@@ -102,17 +99,17 @@ namespace RefUnitedIVRPlatform.Business.Managers
         Url = url
       };
 
-      recordings.Add(recording);
+      recordingRepository.Create(recording);
     }
 
     public List<Recording> GetRecordings()
     {
-      return this.recordings;
+      return recordingRepository.GetAll();
     }
 
     public List<Recording> GetRecordings(int profileId)
     {
-      return this.recordings.Where(m => m.ToProfileId == profileId).ToList();
+      return recordingRepository.GetForProfile(profileId);
     }
 
     public string GetCulture(string lookupPhoneNumber)
@@ -127,11 +124,12 @@ namespace RefUnitedIVRPlatform.Business.Managers
       return profileRepository.GetByPhoneNumber(phoneNumber);
     }
 
-    public void DeleteRecording(int profileId, int recordingIdx)
+    public void DeleteRecording(int profileId, int recordingId)
     {
-      var itemToDelete = recordings.Where(m => m.ToProfileId == profileId).ToList()[recordingIdx];
+      //var itemToDelete = recordings.Where(m => m.ToProfileId == profileId).ToList()[recordingIdx];
 
-      recordings.Remove(itemToDelete);
+      //recordings.Remove(itemToDelete);
+      recordingRepository.DeleteById(recordingId);
     }
 
     public List<IVRProfile> GetAllProfiles()

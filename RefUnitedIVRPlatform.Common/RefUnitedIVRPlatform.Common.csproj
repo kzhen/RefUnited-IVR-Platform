@@ -64,6 +64,7 @@
     <Compile Include="Interfaces\IIVRMainLogic.cs" />
     <Compile Include="Interfaces\IProfileManager.cs" />
     <Compile Include="Interfaces\IProfileRepository.cs" />
+    <Compile Include="Interfaces\IRecordingRepository.cs" />
     <Compile Include="Interfaces\IRefugeesUnitedAccountManager.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\ISMSReceiverLogic.cs" />

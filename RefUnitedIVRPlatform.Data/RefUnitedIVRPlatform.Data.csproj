@@ -63,7 +63,8 @@
     <Compile Include="DtoConverter\IVRProfileToEntityMapper.cs" />
     <Compile Include="DtoEntities\IVRProfileEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\ProfileRepositoryAzure.cs" />
+    <Compile Include="Repositories\ProfileRepository.cs" />
+    <Compile Include="Repositories\RecordingRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\refunited-dotnet-client\RefugeesUnitedApi\RefugeesUnitedApi.csproj">

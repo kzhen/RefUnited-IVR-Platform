@@ -36,7 +36,7 @@ namespace RefUnitedIVRPlatform.Data.Tests
           PIN = "1234"
         };
 
-        ProfileRepositoryAzure repository = new ProfileRepositoryAzure(DEVELOPMENT_CONNECTION_STRING);
+        ProfileRepository repository = new ProfileRepository(DEVELOPMENT_CONNECTION_STRING);
 
         var result = repository.Create(profileToCreate);
 
@@ -74,7 +74,7 @@ namespace RefUnitedIVRPlatform.Data.Tests
       {
         int userId = 123456;
 
-        ProfileRepositoryAzure repository = new ProfileRepositoryAzure(DEVELOPMENT_CONNECTION_STRING);
+        ProfileRepository repository = new ProfileRepository(DEVELOPMENT_CONNECTION_STRING);
 
         var user = repository.Get(userId);
 
@@ -112,7 +112,7 @@ namespace RefUnitedIVRPlatform.Data.Tests
       {
         int profileId = 123456;
 
-        ProfileRepositoryAzure repository = new ProfileRepositoryAzure(DEVELOPMENT_CONNECTION_STRING);
+        ProfileRepository repository = new ProfileRepository(DEVELOPMENT_CONNECTION_STRING);
 
         var result = repository.Delete(new IVRProfile() { ProfileId = profileId });
 
@@ -124,7 +124,7 @@ namespace RefUnitedIVRPlatform.Data.Tests
       {
         int profileId = 5555555;
 
-        ProfileRepositoryAzure repository = new ProfileRepositoryAzure(DEVELOPMENT_CONNECTION_STRING);
+        ProfileRepository repository = new ProfileRepository(DEVELOPMENT_CONNECTION_STRING);
 
         var result = repository.Delete(new IVRProfile() { ProfileId = profileId });
 
@@ -162,7 +162,7 @@ namespace RefUnitedIVRPlatform.Data.Tests
       {
         var phoneNumberToLookup = "+1111111";
 
-        ProfileRepositoryAzure repository = new ProfileRepositoryAzure(DEVELOPMENT_CONNECTION_STRING);
+        ProfileRepository repository = new ProfileRepository(DEVELOPMENT_CONNECTION_STRING);
 
         var userPorfile = repository.GetByPhoneNumber(phoneNumberToLookup);
 
@@ -177,7 +177,7 @@ namespace RefUnitedIVRPlatform.Data.Tests
       [TestMethod]
       public void ShouldReturnAllEntities()
       {
-        ProfileRepositoryAzure repository = new ProfileRepositoryAzure(DEVELOPMENT_CONNECTION_STRING);
+        ProfileRepository repository = new ProfileRepository(DEVELOPMENT_CONNECTION_STRING);
 
         var allProfiles = repository.GetAll();
 
@@ -200,7 +200,7 @@ namespace RefUnitedIVRPlatform.Data.Tests
           PhoneNumber = "+22222221"
         };
 
-        ProfileRepositoryAzure repository = new ProfileRepositoryAzure(DEVELOPMENT_CONNECTION_STRING);
+        ProfileRepository repository = new ProfileRepository(DEVELOPMENT_CONNECTION_STRING);
 
         var createdEntity = repository.Create(profile);
 
