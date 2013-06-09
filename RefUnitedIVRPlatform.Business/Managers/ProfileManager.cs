@@ -10,16 +10,11 @@ namespace RefUnitedIVRPlatform.Business.Managers
 {
   public class ProfileManager : IProfileManager
   {
-    private List<String> urls;
-    //private List<Recording> recordings;
     private IProfileRepository profileRepository;
     private IRecordingRepository recordingRepository;
 
     public ProfileManager(IProfileRepository repository, IRecordingRepository recordingRepository)
     {
-      urls = new List<string>();
-     // recordings = new List<Recording>();
-      
       this.profileRepository = repository;
       this.recordingRepository = recordingRepository;
     }
@@ -80,16 +75,6 @@ namespace RefUnitedIVRPlatform.Business.Managers
       return profile.ProfileId;
     }
 
-    public void SaveRecording(string url)
-    {
-      urls.Add(url);
-    }
-
-    public List<string> GetRecordingUrls()
-    {
-      return this.urls;
-    }
-
     public void SaveRecording(int profileId, int targetProfileId, string url)
     {
       Recording recording = new Recording()
@@ -126,9 +111,6 @@ namespace RefUnitedIVRPlatform.Business.Managers
 
     public void DeleteRecording(int profileId, int recordingId)
     {
-      //var itemToDelete = recordings.Where(m => m.ToProfileId == profileId).ToList()[recordingIdx];
-
-      //recordings.Remove(itemToDelete);
       recordingRepository.DeleteById(recordingId);
     }
 

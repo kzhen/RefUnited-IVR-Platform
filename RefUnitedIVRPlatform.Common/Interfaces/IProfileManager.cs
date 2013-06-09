@@ -18,9 +18,7 @@ namespace RefUnitedIVRPlatform.Common.Interfaces
     
     string GetPin(string lookupPhoneNumber);
     int GetProfileId(string lookupPhoneNumber);
-    void SaveRecording(string url);
-    
-    List<string> GetRecordingUrls();
+
     List<Recording> GetRecordings();
     List<Recording> GetRecordings(int profileId);
     
