@@ -149,5 +149,51 @@ namespace RefUnitedIVRPlatform.Business.Tests
         Assert.AreEqual(twilioRedirect, response.Element.LastNode.ToString());
       }
     }
+
+    [TestClass]
+    public class PlayRecordedVoiceMessageTests
+    {
+      [TestMethod]
+      public void Given_A_ProfileWithNoVoiceMessages_Should_ReturnNoVoiceMessagesPendingMessage()
+      {
+        var profileId = 324784;
+        var profileManager = new Mock<IProfileManager>();
+        var apiRequest = new Mock<IApiRequest>();
+        var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
+
+        profileManager.Setup(m => m.GetRecordings(profileId)).Returns(new List<Common.Entities.Recording>());
+
+        //this is what we are testing!
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
+
+        var result = logic.PlayRecordedVoiceMessage(new VoiceRequest(), profileId, null);
+
+        Assert.AreEqual("<Response>\r\n  <Say>You have no voice messages</Say>\r\n  <Redirect>/IVRMain/MainMenu</Redirect>\r\n</Response>", result.ToString());
+      }
+
+      [TestMethod]
+      public void Given_A_ProfileWithNoMoreMessagesToPlay_Should_ReturnMessageAndRedirectToMenu()
+      {
+        var profileId = 324784;
+        var profileManager = new Mock<IProfileManager>();
+        var apiRequest = new Mock<IApiRequest>();
+        var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
+
+        profileManager.Setup(m => m.GetRecordings(profileId)).Returns(new List<Common.Entities.Recording>()
+          {
+            new Common.Entities.Recording(),
+            new Common.Entities.Recording(),
+            new Common.Entities.Recording(),
+            new Common.Entities.Recording()
+          });
+
+        //this is what we are testing!
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
+
+        var result = logic.PlayRecordedVoiceMessage(new VoiceRequest(), profileId, 4);
+
+        Assert.AreEqual("<Response>\r\n  <Say>No more messages.</Say>\r\n  <Redirect>/IVRMain/MainMenu</Redirect>\r\n</Response>", result.ToString());
+      }
+    }
   }
 }
