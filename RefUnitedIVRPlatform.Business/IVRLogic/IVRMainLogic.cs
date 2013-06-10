@@ -223,7 +223,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       return response;
     }
 
-    public TwilioResponse PlayRecordedVoiceMessageSelection(VoiceRequest request, int profileId, int recordingIdx, int fromProfileId)
+    public TwilioResponse PlayRecordedMessage_Response(VoiceRequest request, int profileId, int recordingIdx, int fromProfileId)
     {
       var response = new TwilioResponse();
 

@@ -82,7 +82,7 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     [HttpPost]
     public ActionResult PlayRecordedMessage_Response(VoiceRequest request, int profileId, int recordingIdx, int fromProfileId)
     {
-      var response = ivrMainLogic.PlayRecordedVoiceMessageSelection(request, profileId, recordingIdx, fromProfileId);
+      var response = ivrMainLogic.PlayRecordedMessage_Response(request, profileId, recordingIdx, fromProfileId);
 
       Response.ContentType = "text/xml";
       return Content(response.Element.ToString());
