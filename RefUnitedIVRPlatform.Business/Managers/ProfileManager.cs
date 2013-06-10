@@ -111,7 +111,7 @@ namespace RefUnitedIVRPlatform.Business.Managers
 
     public void DeleteRecording(int profileId, int recordingId)
     {
-      recordingRepository.DeleteById(recordingId);
+      throw new NotImplementedException();
     }
 
     public List<IVRProfile> GetAllProfiles()
