@@ -90,7 +90,7 @@ namespace RefUnitedIVRPlatform.Business.Tests
 
         apiRequest.Setup(m => m.GetFavourites(profileId)).Returns(favs);
 
-        
+
 
         var response = logic.ListFavourites(new Twilio.Mvc.VoiceRequest(), profileId, 1);
 
@@ -193,6 +193,161 @@ namespace RefUnitedIVRPlatform.Business.Tests
         var result = logic.PlayRecordedVoiceMessage(new VoiceRequest(), profileId, 4);
 
         Assert.AreEqual("<Response>\r\n  <Say>No more messages.</Say>\r\n  <Redirect>/IVRMain/MainMenu</Redirect>\r\n</Response>", result.ToString());
+      }
+
+      [TestMethod]
+      public void Given_A_ProfileWithOneVoiceMessage_Should_ReturnTheFirstVoiceMessage()
+      
+      {
+        var profileId = 324784;
+        var profileManager = new Mock<IProfileManager>();
+        var apiRequest = new Mock<IApiRequest>();
+        var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
+
+        profileManager.Setup(m => m.GetRecordings(profileId)).Returns(new List<Common.Entities.Recording>()
+          {
+            new Common.Entities.Recording() { FromProfileId = 111, ToProfileId = profileId, Url = "url" }
+          });
+
+        //this is what we are testing!
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
+
+        var result = logic.PlayRecordedVoiceMessage(new VoiceRequest(), profileId, 0);
+
+        Assert.AreEqual("<Response>\r\n  <Say>Playing message 1</Say>\r\n  <Play>url</Play>\r\n  <Gather numDigits=\"1\" action=\"/IVRMain/PlayRecordedMessage_Response?profileId=324784&amp;recordingIdx=0&amp;fromProfileId=111\">\r\n    <Say>Press one to repeat this message</Say>\r\n    <Say>Press two to delete this message</Say>\r\n    <Say>Press three to reply to this message</Say>\r\n    <Say>Press four to go to the next message</Say>\r\n  </Gather>\r\n</Response>"
+, result.ToString());
+      }
+    }
+
+    [TestClass]
+    public class PlayRecordedMessage_ResponseTests
+    {
+      [TestMethod]
+      public void Given_TheUser_Presses1_Should_RepeatTheMessage()
+      {
+        var profileId = 324784;
+        var profileManager = new Mock<IProfileManager>();
+        var apiRequest = new Mock<IApiRequest>();
+        var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
+
+        var voiceRequest = new VoiceRequest() { Digits = "1" };
+
+        profileManager.Setup(m => m.GetRecordings(profileId)).Returns(new List<Common.Entities.Recording>()
+          {
+            new Common.Entities.Recording() { FromProfileId = 111, ToProfileId = profileId, Url = "url" }
+          });
+
+        //this is what we are testing!
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
+
+        //var result = logic.PlayRecordedVoiceMessage(new VoiceRequest(), profileId, 0);
+        var result = logic.PlayRecordedMessage_Response(voiceRequest, profileId, 0, 111);
+
+        Assert.AreEqual("<Response>\r\n  <Redirect>/IVRMain/PlayRecordedMessage?profileId=324784&amp;recordingIdx=0</Redirect>\r\n</Response>"
+, result.ToString());
+      }
+
+      [TestMethod]
+      public void Given_TheUser_Presses2_Should_DeleteRecordingAndPlayNextMessage()
+      {
+        var profileId = 324784;
+        var profileManager = new Mock<IProfileManager>();
+        var apiRequest = new Mock<IApiRequest>();
+        var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
+
+        var voiceRequest = new VoiceRequest() { Digits = "2" };
+
+        profileManager.Setup(m => m.GetRecordings(profileId)).Returns(new List<Common.Entities.Recording>()
+          {
+            new Common.Entities.Recording() { FromProfileId = 111, ToProfileId = profileId, Url = "url" }
+          });
+
+        //this is what we are testing!
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
+
+        var result = logic.PlayRecordedMessage_Response(voiceRequest, profileId, 0, 111);
+
+        Assert.AreEqual("<Response>\r\n  <Redirect>/IVRMain/PlayRecordedMessage?profileId=324784&amp;recordingIdx=0</Redirect>\r\n</Response>"
+, result.ToString());
+        profileManager.Verify(m=>m.DeleteRecording(profileId, 0));
+      }
+
+      [TestMethod]
+      public void Given_TheUser_Presses3_Should_RecordResponse()
+      {
+        var profileId = 324784;
+        var profileManager = new Mock<IProfileManager>();
+        var apiRequest = new Mock<IApiRequest>();
+        var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
+
+        var voiceRequest = new VoiceRequest() { Digits = "3" };
+
+        profileManager.Setup(m => m.GetRecordings(profileId)).Returns(new List<Common.Entities.Recording>()
+          {
+            new Common.Entities.Recording() { FromProfileId = 111, ToProfileId = profileId, Url = "url" }
+          });
+
+        //this is what we are testing!
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
+
+        var result = logic.PlayRecordedMessage_Response(voiceRequest, profileId, 0, 111);
+
+        Assert.AreEqual("<Response>\r\n  <Say>At the tone please record your response. Press any key when you are done.</Say>\r\n  <Record action=\"/IVRMain/PlayRecordedMessage_SaveResponse?profileId=324784&amp;recordingIdx=0&amp;fromProfileId=111\" />\r\n</Response>"
+                ,result.ToString());
+      }
+
+      [TestMethod]
+      public void Given_TheUser_Pressed4_Should_GoToTheNextMessage()
+      {
+        var profileId = 324784;
+        var profileManager = new Mock<IProfileManager>();
+        var apiRequest = new Mock<IApiRequest>();
+        var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
+
+        var voiceRequest = new VoiceRequest() { Digits = "4" };
+
+        profileManager.Setup(m => m.GetRecordings(profileId)).Returns(new List<Common.Entities.Recording>()
+          {
+            new Common.Entities.Recording() { FromProfileId = 111, ToProfileId = profileId, Url = "url" }
+          });
+
+        //this is what we are testing!
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
+
+        var result = logic.PlayRecordedMessage_Response(voiceRequest, profileId, 0, 111);
+
+        Assert.AreEqual("<Response>\r\n  <Redirect>/IVRMain/PlayRecordedMessage?profileId=324784&amp;recordingIdx=1</Redirect>\r\n</Response>"
+                , result.ToString());
+      }
+    }
+
+    [TestClass]
+    public class SaveVoiceMessageReplyTests
+    {
+      [TestMethod]
+      public void Given_TheUser_HasRecordedAReplyMessage_Should_SaveTheReply()
+      
+      {
+        var profileId = 324784;
+        var fromProfileId = 111;
+        var profileManager = new Mock<IProfileManager>();
+        var apiRequest = new Mock<IApiRequest>();
+        var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
+
+        var voiceRequest = new VoiceRequest() { Digits = "4" };
+
+        profileManager.Setup(m => m.GetRecordings(profileId)).Returns(new List<Common.Entities.Recording>()
+          {
+            new Common.Entities.Recording() { FromProfileId = fromProfileId, ToProfileId = profileId, Url = "url" }
+          });
+
+        //this is what we are testing!
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
+
+        var result = logic.SaveVoiceMessageReply(voiceRequest, profileId, 0, fromProfileId);
+
+        Assert.AreEqual("<Response>\r\n  <Say>Your message has been saved.</Say>\r\n  <Redirect>/IVRMain/PlayRecordedMessage?profileId=324784&amp;recordingIdx=1</Redirect>\r\n</Response>"
+                        , result.ToString());
       }
     }
   }
