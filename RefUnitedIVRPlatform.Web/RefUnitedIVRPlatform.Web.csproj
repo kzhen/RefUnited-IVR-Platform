@@ -235,6 +235,12 @@
     <Content Include="RefUnitedApiSettings.template.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="RefUnitedConnectionStrings.template.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="RefUnitedConnectionStrings.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Properties\PublishProfiles\refuniteivr - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\refuniteivr - Web Deploy.pubxml" />
     <Content Include="RefUnitedApiSettings.config">
@@ -351,6 +357,8 @@
   </Target>-->
   <Target Name="AfterBuild">
     <Copy SourceFiles="RefUnitedApiSettings.template.config" DestinationFiles="RefUnitedApiSettings.config" SkipUnchangedFiles="true" Condition="!Exists('RefUnitedApiSettings.config')">
+    </Copy>
+    <Copy SourceFiles="RefUnitedConnectionStrings.template.config" DestinationFiles="RefUnitedConnectionStrings.config" SkipUnchangedFiles="true" Condition="!Exists('RefUnitedConnectionStrings.config')">
     </Copy>
   </Target>
 </Project>

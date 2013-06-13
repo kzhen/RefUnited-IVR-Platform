@@ -4,6 +4,7 @@
 
 ## Sensitive API settings go in here
 RefUnitedApiSettings.config
+RefUnitedConnectionStrings.config
 
 #################
 ## Eclipse
