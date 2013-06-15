@@ -19,6 +19,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
     public IVREntryLogic(IProfileManager profileManager)
     {
       this.profileManager = profileManager;
+      
     }
 
     public TwilioResponse GetGreeting(VoiceRequest request)
@@ -46,6 +47,10 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
 
           IVREntryLang.Culture = new System.Globalization.CultureInfo(culture);
           twiMLHelper = new TwiMLHelper(culture, LanguageHelper.IsImplementedAsMP3(culture));
+        }
+        else
+        {
+          twiMLHelper = new TwiMLHelper(LanguageHelper.GetDefaultCulture(), false);
         }
 
         twiMLHelper.SayOrPlay(response, IVREntryLang.Welcome);
