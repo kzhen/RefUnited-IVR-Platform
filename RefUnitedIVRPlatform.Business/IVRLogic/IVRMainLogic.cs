@@ -76,9 +76,9 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
             response.Redirect(string.Format("/IVRBroadcast/ListenToBroadcasts?profileId={0}", profileId));
             break;
           default:
+            response.Redirect("/IVRMain/MainMenu");
             break;
         }
-        response.Redirect("/IVRMain/MainMenu");
       }
       catch (Exception ex)
       {
