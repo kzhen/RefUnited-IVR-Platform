@@ -16,6 +16,7 @@ using RefUnitedIVRPlatform.Data.Repositories;
 using RefugeesUnitedApi;
 using RefUnitedIVRPlatform.Business.SMSReceiverLogic;
 using System.Configuration;
+using RefUnitedIVRPlatform.Common;
 
 namespace RefUnitedIVRPlatform.Web
 {
@@ -42,6 +43,8 @@ namespace RefUnitedIVRPlatform.Web
       var azureTableStorageConnectionString = ConfigurationManager.AppSettings["AzureTableStorageConnectionString"];
 
       builder.Register<IApiRequest>(m => new ApiRequest(apiRequestSettings)).InstancePerHttpRequest();
+      builder.Register<IIVRRouteProvider>(m => new IVRRouteProvider());
+
       builder.Register<IProfileRepository>(m => new ProfileRepository(azureTableStorageConnectionString)).SingleInstance();
       builder.Register<IRecordingRepository>(m => new RecordingRepository(azureTableStorageConnectionString)).SingleInstance();
 
@@ -54,6 +57,7 @@ namespace RefUnitedIVRPlatform.Web
       builder.Register<IIVREntryLogic>(m => new IVREntryLogic(m.Resolve<IProfileManager>())).InstancePerHttpRequest();
       builder.Register<IIVRMainLogic>(m => new IVRMainLogic(m.Resolve<IProfileManager>(), m.Resolve<IRefugeesUnitedAccountManager>()));
       builder.Register<IIVRAuthenticateLogic>(m => new IVRAuthenticateLogic(m.Resolve<IProfileManager>()));
+      builder.Register<IIVRBroadcastLogic>(m => new IVRBroadcastLogic(m.Resolve<IBroadcastManager>(), m.Resolve<IIVRRouteProvider>(), m.Resolve<IProfileManager>()));
 
       builder.RegisterControllers(typeof(MvcApplication).Assembly);
       builder.RegisterApiControllers(typeof(MvcApplication).Assembly);
