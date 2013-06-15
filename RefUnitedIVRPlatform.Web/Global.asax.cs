@@ -70,6 +70,10 @@ namespace RefUnitedIVRPlatform.Web
       var container = BuildMVCContainer();
       DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 
+      /// verify that all routes have been configured for the IVRRouteProvider
+      var routeProvider = container.Resolve<IIVRRouteProvider>();
+      routeProvider.VerifyAllRoutes(typeof(IVRRoutes));
+
       var resolver = new AutofacWebApiDependencyResolver(container);
       GlobalConfiguration.Configuration.DependencyResolver = resolver;
 

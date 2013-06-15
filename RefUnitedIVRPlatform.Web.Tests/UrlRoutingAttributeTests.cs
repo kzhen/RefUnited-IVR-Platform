@@ -14,9 +14,17 @@ namespace RefUnitedIVRPlatform.Web.Tests
   [TestClass]
   public class UrlRoutingAttributeTests
   {
+    internal class MyRoutes
+    {
+      public const string ACTION1 = "ReturnSomeAction";
+      public const string ACTION2 = "ReturnSomeActionWithParam";
+      public const string ACTION3 = "ReturnSomeActionWithParam2";
+      public string iShouldBeIgnored = "abc";
+    }
+
     internal class TestController : Controller
     {
-      [IVRUrlRoute("ReturnSomeAction")]
+      [IVRUrlRoute(MyRoutes.ACTION1)]
       [HttpPost]
       public ActionResult IVRMethod_ReturnSomeAction()
       {
@@ -24,14 +32,14 @@ namespace RefUnitedIVRPlatform.Web.Tests
       }
 
       [HttpPost]
-      [IVRUrlRoute("ReturnSomeActionWithParam")]
+      [IVRUrlRoute(MyRoutes.ACTION2)]
       public ActionResult MyActionWithParam(int profileId)
       {
         return View();
       }
 
       [HttpPost]
-      [IVRUrlRoute("ReturnSomeActionWithParam2")]
+      [IVRUrlRoute(MyRoutes.ACTION3)]
       public ActionResult MyActionWithParam2(VoiceRequest request, int profileId)
       {
         return View();
@@ -76,6 +84,13 @@ namespace RefUnitedIVRPlatform.Web.Tests
       string actualUrl = routeProvider.GetUrlMethod("ReturnSomeActionWithParam2", profileId.ToString());
 
       Assert.AreEqual(expectedUrl, actualUrl);
+    }
+
+    [TestMethod]
+    public void ShouldVerifyAllRoutesHaveMethods()
+    {
+      IIVRRouteProvider routeProvider = new IVRRouteProvider();
+      routeProvider.VerifyAllRoutes(typeof(MyRoutes));
     }
   }
 }

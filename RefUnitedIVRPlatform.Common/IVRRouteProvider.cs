@@ -76,5 +76,18 @@ namespace RefUnitedIVRPlatform.Common
 
       return url;
     }
+
+    public void VerifyAllRoutes(Type type)
+    {
+      var routeStrings = type.GetFields().Where(m => m.IsStatic && m.IsLiteral);
+
+      routeStrings.ToList().ForEach(x =>
+        {
+          if (!routes.ContainsKey(x.GetRawConstantValue().ToString()))
+          {
+            throw new Exception("Missing route: " + x.GetRawConstantValue().ToString());
+          }
+        });
+    }
   }
 }

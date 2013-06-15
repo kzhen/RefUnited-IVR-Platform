@@ -9,5 +9,6 @@ namespace RefUnitedIVRPlatform.Common.Interfaces
   public interface IIVRRouteProvider
   {
     string GetUrlMethod(string ivrRoute, params object[] parameters);
+    void VerifyAllRoutes(Type type);
   }
 }
