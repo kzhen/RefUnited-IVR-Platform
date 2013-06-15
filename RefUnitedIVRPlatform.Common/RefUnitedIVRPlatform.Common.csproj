@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\IVRUrlRoute.cs" />
     <Compile Include="Entities\IVRProfile.cs" />
     <Compile Include="Entities\PublicBroadcast.cs" />
     <Compile Include="Entities\Recording.cs" />
@@ -65,12 +66,14 @@
     <Compile Include="Interfaces\IIVRBroadcastLogic.cs" />
     <Compile Include="Interfaces\IIVREntryLogic.cs" />
     <Compile Include="Interfaces\IIVRMainLogic.cs" />
+    <Compile Include="Interfaces\IIVRRouteProvider.cs" />
     <Compile Include="Interfaces\IProfileManager.cs" />
     <Compile Include="Interfaces\IProfileRepository.cs" />
     <Compile Include="Interfaces\IRecordingRepository.cs" />
     <Compile Include="Interfaces\IRefugeesUnitedAccountManager.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\ISMSReceiverLogic.cs" />
+    <Compile Include="IVRRouteProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VoiceRequestExtensionMethods.cs" />
   </ItemGroup>
