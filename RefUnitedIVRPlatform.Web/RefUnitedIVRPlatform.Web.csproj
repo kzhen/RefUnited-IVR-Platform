@@ -212,6 +212,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IVRAuthenticateController.cs" />
+    <Compile Include="Controllers\IVRBroadcastController.cs" />
     <Compile Include="Controllers\IVREntryController.cs" />
     <Compile Include="Controllers\IVRMainController.cs" />
     <Compile Include="Controllers\SMSReceiverController.cs" />

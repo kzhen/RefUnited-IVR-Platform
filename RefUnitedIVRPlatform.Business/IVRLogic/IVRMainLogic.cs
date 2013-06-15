@@ -15,11 +15,13 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
   {
     private IProfileManager profileManager;
     private IRefugeesUnitedAccountManager refUnitedAcctManager;
+    private IBroadcastManager broadcastManager;
 
-    public IVRMainLogic(IProfileManager profileManager, IRefugeesUnitedAccountManager refUnitedAcctManager)
+    public IVRMainLogic(IProfileManager profileManager, IRefugeesUnitedAccountManager refUnitedAcctManager, IBroadcastManager broadcastManager)
     {
       this.profileManager = profileManager;
       this.refUnitedAcctManager = refUnitedAcctManager;
+      this.broadcastManager = broadcastManager;
     }
 
     public TwilioResponse GetMainMenu()
@@ -32,6 +34,9 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       response.Say("Press two to listen to old messages.");
       response.Say("Press three to send a voice message to a favourite.");
       response.Say("Press four to listen to voice messages.");
+      response.Say("Press five to send a public broadcast.");
+      response.Say("Press six to listen public broadcasts.");
+
       response.EndGather();
 
       return response;
@@ -65,6 +70,12 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
             break;
           case 4:
             response.Redirect(string.Format("/IVRMain/PlayRecordedMessage?profileId={0}", profileId));
+            break;
+          case 5:
+            response.Redirect(string.Format("/IVRBroadcast/RecordBroadcast?profileId={0}", profileId));
+            break;
+          case 6:
+            response.Redirect(string.Format("/IVRBroadcast/ListenToBroadcasts?profileId={0}", profileId));
             break;
           default:
             break;
@@ -164,7 +175,6 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
 
       return response;
     }
-
 
     public TwilioResponse PlayRecordedVoiceMessage(VoiceRequest request, int profileId, int? recordingIdx)
     {

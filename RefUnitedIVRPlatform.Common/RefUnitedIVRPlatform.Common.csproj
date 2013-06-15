@@ -58,8 +58,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\IVRProfile.cs" />
+    <Compile Include="Entities\PublicBroadcast.cs" />
     <Compile Include="Entities\Recording.cs" />
+    <Compile Include="Interfaces\IBroadcastManager.cs" />
     <Compile Include="Interfaces\IIVRAuthenticateLogic.cs" />
+    <Compile Include="Interfaces\IIVRBroadcastLogic.cs" />
     <Compile Include="Interfaces\IIVREntryLogic.cs" />
     <Compile Include="Interfaces\IIVRMainLogic.cs" />
     <Compile Include="Interfaces\IProfileManager.cs" />

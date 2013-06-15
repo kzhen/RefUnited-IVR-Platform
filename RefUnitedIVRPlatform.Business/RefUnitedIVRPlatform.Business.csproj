@@ -57,9 +57,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IVRLogic\IVRAuthenticateLogic.cs" />
+    <Compile Include="IVRLogic\IVRBroadcastLogic.cs" />
     <Compile Include="IVRLogic\IVREntryLogic.cs" />
     <Compile Include="IVRLogic\IVRMainLogic.cs" />
     <Compile Include="LanguageHelper.cs" />
+    <Compile Include="Managers\BroadcastManager.cs" />
     <Compile Include="Managers\ProfileManager.cs" />
     <Compile Include="Managers\RefugeesUnitedAccountManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
