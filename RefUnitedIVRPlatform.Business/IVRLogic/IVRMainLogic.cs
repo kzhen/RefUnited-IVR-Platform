@@ -15,13 +15,11 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
   {
     private IProfileManager profileManager;
     private IRefugeesUnitedAccountManager refUnitedAcctManager;
-    private IBroadcastManager broadcastManager;
 
-    public IVRMainLogic(IProfileManager profileManager, IRefugeesUnitedAccountManager refUnitedAcctManager, IBroadcastManager broadcastManager)
+    public IVRMainLogic(IProfileManager profileManager, IRefugeesUnitedAccountManager refUnitedAcctManager)
     {
       this.profileManager = profileManager;
       this.refUnitedAcctManager = refUnitedAcctManager;
-      this.broadcastManager = broadcastManager;
     }
 
     public TwilioResponse GetMainMenu()
