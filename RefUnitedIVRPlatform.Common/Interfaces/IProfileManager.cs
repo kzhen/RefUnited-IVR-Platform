@@ -30,5 +30,7 @@ namespace RefUnitedIVRPlatform.Common.Interfaces
     void DeleteRecording(int profileId, int recordingIdx);
 
     List<IVRProfile> GetAllProfiles();
+
+    bool CheckIfProfileExists(int profileId);
   }
 }

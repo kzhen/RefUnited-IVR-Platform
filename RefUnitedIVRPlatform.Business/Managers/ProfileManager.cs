@@ -118,5 +118,18 @@ namespace RefUnitedIVRPlatform.Business.Managers
     {
       return this.profileRepository.GetAll();
     }
+
+    public bool CheckIfProfileExists(int profileId)
+    {
+      try
+      {
+        var profile = profileRepository.Get(profileId);
+        return true;
+      }
+      catch (Exception)
+      {
+        return false;
+      }
+    }
   }
 }
