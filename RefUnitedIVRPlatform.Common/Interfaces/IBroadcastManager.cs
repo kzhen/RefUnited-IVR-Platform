@@ -12,5 +12,9 @@ namespace RefUnitedIVRPlatform.Common.Interfaces
     void SaveBroadcast(PublicBroadcast broadcast);
     List<PublicBroadcast> GetAll();
     List<PublicBroadcast> GetSimiliar(int profileId);
+
+    PublicBroadcast Get(int lastBroadcastIdx);
+
+    void SaveBroadcastReply(PublicBroadcast broadcast, PublicBroadcast broadcastReply);
   }
 }

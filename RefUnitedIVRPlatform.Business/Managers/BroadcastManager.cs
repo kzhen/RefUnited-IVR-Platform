@@ -31,5 +31,15 @@ namespace RefUnitedIVRPlatform.Business.Managers
     {
       throw new NotImplementedException();
     }
+
+    public PublicBroadcast Get(int lastBroadcastIdx)
+    {
+      return publicBroadcasts.Skip(lastBroadcastIdx).Take(1).SingleOrDefault();
+    }
+
+    public void SaveBroadcastReply(PublicBroadcast broadcast, PublicBroadcast broadcastReply)
+    {
+      
+    }
   }
 }

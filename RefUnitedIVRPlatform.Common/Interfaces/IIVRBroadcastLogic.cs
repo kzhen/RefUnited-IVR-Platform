@@ -12,6 +12,12 @@ namespace RefUnitedIVRPlatform.Common.Interfaces
   {
     TwilioResponse RecordBroadcast(VoiceRequest request, int profileId);
     TwilioResponse RecordBroadcast_SaveRecording(VoiceRequest request, int profileId);
-    TwilioResponse ListenToBroadcasts(VoiceRequest request, int profileId);
+    TwilioResponse ListenToBroadcastsMenu(VoiceRequest request, int profileId);
+    TwilioResponse ListenToPublicBroadcasts(VoiceRequest request, int profileId, int idx);
+    TwilioResponse BroadcastResponseSelection(VoiceRequest request, int profileId, int lastBroadcastIdx);
+    TwilioResponse RecordPrivateReply(VoiceRequest request, int profileId, int lastBroadcastIdx);
+    TwilioResponse SavePrivateReply(VoiceRequest request, int profileId, int lastBroadcastIdx);
+    TwilioResponse RecordPublicReply(VoiceRequest request, int profileId, int lastBroadcastIdx);
+    TwilioResponse SavePublicReply(VoiceRequest request, int profileId, int lastBroadcastIdx);
   }
 }

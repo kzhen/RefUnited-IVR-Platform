@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RefUnitedIVRPlatform.Common;
 using RefUnitedIVRPlatform.Common.Entities;
 using RefUnitedIVRPlatform.Common.Interfaces;
 using Twilio.Mvc;
@@ -12,11 +13,15 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
 {
   public class IVRBroadcastLogic : IIVRBroadcastLogic
   {
-    IBroadcastManager broadcastManager;
+    private IBroadcastManager broadcastManager;
+    private IIVRRouteProvider ivrRouteProvider;
+    private IProfileManager profileManager;
 
-    public IVRBroadcastLogic(IBroadcastManager broadcastManager)
+    public IVRBroadcastLogic(IBroadcastManager broadcastManager, IIVRRouteProvider ivrRouteProvider, IProfileManager profileManager)
     {
       this.broadcastManager = broadcastManager;
+      this.ivrRouteProvider = ivrRouteProvider;
+      this.profileManager = profileManager;
     }
 
     public TwilioResponse RecordBroadcast(VoiceRequest request, int profileId)
@@ -24,11 +29,10 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       var response = new TwilioResponse();
 
       response.Say("At the tone record your message, to finish press any key. Please note that this will be public to all people on the Refugees United platform.");
-      response.Record(new { action = string.Format("/IVRMain/RecordBroadcast_SaveRecording?profileId={0}", profileId), playBeep = true });
+      response.Record(new { action = ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCAST_SAVE_PUBLIC_BROADCAST, profileId), playBeep = true });
 
       return response;
     }
-
 
     public TwilioResponse RecordBroadcast_SaveRecording(VoiceRequest request, int profileId)
     {
@@ -46,15 +50,15 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       return response;
     }
 
-    public TwilioResponse ListenToBroadcasts(VoiceRequest request, int profileId)
+    public TwilioResponse ListenToBroadcastsMenu(VoiceRequest request, int profileId)
     {
       var response = new TwilioResponse();
 
       if (string.IsNullOrEmpty(request.Digits))
       {
-        response.BeginGather(new { numDigits = 1, action = string.Format("/IVRMain/ListenToBroadcasts?profileId={0}", profileId) });
+        response.BeginGather(new { numDigits = 1, action = ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCAST_MENU, profileId.ToString()) });
         response.Say("Press one to listen to all public broadcasts");
-        response.Say("Press two to listen to public broadcasts which match your country of origin");
+        //response.Say("Press two to listen to public broadcasts which match your country of origin");
         response.EndGather();
 
         return response;
@@ -63,14 +67,122 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       switch (request.Digits)
       {
         case "1":
-          response.Redirect("/");
+          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_LISTEN_TO_ALL_PUBLIC, profileId, 0));
           return response;
         case "2":
+          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCAST_LISTEN_TO_MATCHED, "countryOfBirthId"));
           return response;
         default:
-          response.Redirect("/IVRMain/MainMenu");
+          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.MAIN_MENU_SELECTION));
           return response;
       }
+    }
+
+    public TwilioResponse ListenToPublicBroadcasts(VoiceRequest request, int profileId, int idx)
+    {
+      var response = new TwilioResponse();
+
+      PublicBroadcast broadcast;
+
+      try
+      {
+        broadcast = broadcastManager.GetAll().Skip(idx).Take(1).FirstOrDefault();
+      }
+      catch (Exception)
+      {
+        broadcast = null;
+      }
+
+      if (broadcast == null)
+      {
+        response.Say("No more broadcasts found, returning to the main menu");
+        response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
+
+        return response;
+      }
+
+      var fromProfile = profileManager.GetProfile(broadcast.FromProfileId);
+
+      response.Say(string.Format("Playing broadcast from {0}", fromProfile.FullName));
+      response.Play(broadcast.Url);
+
+      response.BeginGather(new { action = ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCAST_RESPONSE_SELECTION, profileId, idx), playBeep = true, numDigits = 1 });
+      response.Say("Press one to reply privately to this broadcast.");
+      response.Say("Press two to reply publicly to this broadcast.");
+      response.Say("Press three to listen to the next broadcast.");
+      response.EndGather();
+      
+      return response;
+    }
+
+    public TwilioResponse BroadcastResponseSelection(VoiceRequest request, int profileId, int lastBroadcastIdx)
+    {
+      var response = new TwilioResponse();
+
+      var selection = request.Digits;
+
+      switch (selection)
+      {
+        case "1":
+          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_REPLY_PRIVATELY, profileId, lastBroadcastIdx));
+          return response;
+        case "2":
+          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_REPLY_PUBLICLY, profileId, lastBroadcastIdx));
+          return response;
+        default:
+          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_LISTEN_TO_ALL_PUBLIC, profileId, ++lastBroadcastIdx));
+          return response;
+      }
+    }
+
+    public TwilioResponse RecordPrivateReply(VoiceRequest request, int profileId, int lastBroadcastIdx)
+    {
+      var response = new TwilioResponse();
+      response.Say("At the tone please record your reply.");
+      response.Record(new { action = ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCAST_SAVE_PRIVATE_REPLY, profileId, lastBroadcastIdx), playBeep = true });
+      return response;
+    }
+
+    public TwilioResponse SavePrivateReply(VoiceRequest request, int profileId, int lastBroadcastIdx)
+    {
+      var response = new TwilioResponse();
+
+      response.Say("Thank you, your response has been sent.");
+      response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
+
+      var broadcast = broadcastManager.Get(lastBroadcastIdx);
+
+      profileManager.SaveRecording(profileId, broadcast.FromProfileId, request.RecordingUrl);
+
+      return response;
+    }
+
+    public TwilioResponse RecordPublicReply(VoiceRequest request, int profileId, int lastBroadcastIdx)
+    {
+      var response = new TwilioResponse();
+      response.Say("At the tone please record your reply.");
+      response.Record(new { action = ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCAST_SAVE_PUBLIC_REPLY, profileId, lastBroadcastIdx), playBeep = true });
+      return response;
+    }
+
+    public TwilioResponse SavePublicReply(VoiceRequest request, int profileId, int lastBroadcastIdx)
+    {
+      var response = new TwilioResponse();
+
+      response.Say("Thank you, your response has been sent.");
+      response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
+
+      var broadcast = broadcastManager.Get(lastBroadcastIdx);
+
+      PublicBroadcast broadcastReply = new PublicBroadcast()
+      {
+        FromProfileId = profileId,
+        Url = request.RecordingUrl
+      };
+
+      broadcastManager.SaveBroadcastReply(broadcast, broadcastReply);
+
+      return response;
     }
   }
 }
