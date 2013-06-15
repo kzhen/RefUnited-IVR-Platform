@@ -147,7 +147,17 @@ namespace RefUnitedIVRPlatform.Web.Controllers
         FullName = fullName
       };
 
-      profileManager.CreateProfile(ivrProfile);
+      bool exists = profileManager.CheckIfProfileExists(profileId);
+
+      if (exists)
+      {
+        profileManager.UpdateProfile(ivrProfile);
+      }
+      else
+      {
+        profileManager.CreateProfile(ivrProfile);
+      }
+
 
       return RedirectToAction("SetupComplete");
     }
