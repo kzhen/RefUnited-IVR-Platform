@@ -9,6 +9,8 @@ using System.Text;
 using System.Web.Mvc;
 using Twilio.Mvc;
 using Twilio.TwiML;
+using RefUnitedIVRPlatform.Common.Attributes;
+using RefUnitedIVRPlatform.Common;
 
 namespace RefUnitedIVRPlatform.Web.Controllers
 {
@@ -26,6 +28,7 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     }
 
     [HttpPost]
+    [IVRUrlRoute(IVRRoutes.PLAY_MAIN_MENU)]
     public ActionResult MainMenu(VoiceRequest request)
     {
       var response = ivrMainLogic.GetMainMenu();
@@ -35,6 +38,7 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     }
 
     [HttpPost]
+    [IVRUrlRoute(IVRRoutes.MAIN_MENU_SELECTION)]    
     public ActionResult MainMenuSelection(VoiceRequest request)
     {
       var response = ivrMainLogic.GetMenuSelection(request);
