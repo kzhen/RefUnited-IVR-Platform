@@ -14,15 +14,21 @@ namespace RefUnitedIVRPlatform.Data.DtoConverter
     {
       return new RecordingEntity()
       {
-
+        FromProfileId = recordingToConvert.FromProfileId,
+        ToProfileId = recordingToConvert.ToProfileId,
+        Url = recordingToConvert.Url,
+        PartitionKey = recordingToConvert.ToProfileId.ToString(),
+        RowKey = Guid.NewGuid().ToString()
       };
     }
 
-    internal static Recording ConvertFromEntity(RecordingEntity eneityToConvert)
+    internal static Recording ConvertFromEntity(RecordingEntity entityToConvert)
     {
       return new Recording()
       {
-
+        FromProfileId = entityToConvert.FromProfileId,
+        ToProfileId = entityToConvert.ToProfileId,
+        Url = entityToConvert.Url
       };
     }
 

@@ -63,18 +63,19 @@ namespace RefUnitedIVRPlatform.Data.Repositories
 
     public Recording Get(int id)
     {
-      string partitionKey = id.ToString().Substring(0, 2);
-      string rowKey = id.ToString();
+      throw new NotImplementedException();
+      //string partitionKey = id.ToString().Substring(0, 2);
+      //string rowKey = id.ToString();
 
-      TableOperation getOperation = TableOperation.Retrieve<RecordingEntity>(partitionKey, rowKey);
+      //TableOperation getOperation = TableOperation.Retrieve<RecordingEntity>(partitionKey, rowKey);
 
-      var result = recordingsTable.Execute(getOperation);
+      //var result = recordingsTable.Execute(getOperation);
 
-      var entity = (RecordingEntity)result.Result;
+      //var entity = (RecordingEntity)result.Result;
 
-      var returnValue = RecordingToEntityMapper.ConvertFromEntity(entity);
+      //var returnValue = RecordingToEntityMapper.ConvertFromEntity(entity);
 
-      return returnValue;
+      //return returnValue;
     }
 
     public Recording Create(Recording item)
@@ -126,25 +127,26 @@ namespace RefUnitedIVRPlatform.Data.Repositories
 
     public bool Update(Recording profile)
     {
-      var profileEntity = RecordingToEntityMapper.ConvertToEntity(profile);
+      throw new NotImplementedException();
+      //var profileEntity = RecordingToEntityMapper.ConvertToEntity(profile);
 
-      TableOperation retrievalOperation = TableOperation.Retrieve<IVRProfileEntity>(profileEntity.PartitionKey, profileEntity.RowKey);
+      //TableOperation retrievalOperation = TableOperation.Retrieve<IVRProfileEntity>(profileEntity.PartitionKey, profileEntity.RowKey);
 
-      var retrievalResult = recordingsTable.Execute(retrievalOperation);
+      //var retrievalResult = recordingsTable.Execute(retrievalOperation);
 
-      var entityToUpdate = (IVRProfileEntity)retrievalResult.Result;
+      //var entityToUpdate = (IVRProfileEntity)retrievalResult.Result;
 
-      if (entityToUpdate != null)
-      {
-        RecordingToEntityMapper.UpdateEntity(entityToUpdate, profileEntity);
+      //if (entityToUpdate != null)
+      //{
+      //  RecordingToEntityMapper.UpdateEntity(entityToUpdate, profileEntity);
 
-        TableOperation updateOperation = TableOperation.Replace(entityToUpdate);
-        var updateResult = recordingsTable.Execute(updateOperation);
+      //  TableOperation updateOperation = TableOperation.Replace(entityToUpdate);
+      //  var updateResult = recordingsTable.Execute(updateOperation);
 
-        return true;
-      }
+      //  return true;
+      //}
 
-      return false;
+      //return false;
     }
   }
 }
