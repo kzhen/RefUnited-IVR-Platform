@@ -8,6 +8,6 @@ namespace RefUnitedIVRPlatform.Common.Interfaces
 {
   public interface IIVRRouteProvider
   {
-    string GetUrlMethod(string ivrRoute, params string[] parameters);
+    string GetUrlMethod(string ivrRoute, params object[] parameters);
   }
 }

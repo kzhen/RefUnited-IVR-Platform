@@ -65,7 +65,7 @@ namespace RefUnitedIVRPlatform.Common
         });
     }
 
-    public string GetUrlMethod(string ivrRoute, params string[] parameters)
+    public string GetUrlMethod(string ivrRoute, params object[] parameters)
     {
       string url = routes[ivrRoute];
 
