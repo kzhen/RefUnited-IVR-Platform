@@ -3,23 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RefUnitedIVRPlatform.Common.Entities;
 using RefUnitedIVRPlatform.Common.Interfaces;
 
 namespace RefUnitedIVRPlatform.Business.Managers
 {
   public class BroadcastManager : IBroadcastManager
   {
-    public void SaveBroadcast(Common.Entities.PublicBroadcast broadcast)
+    private List<PublicBroadcast> publicBroadcasts;
+
+    public BroadcastManager()
     {
-      throw new NotImplementedException();
+      publicBroadcasts = new List<PublicBroadcast>();
     }
 
-    public List<Common.Entities.PublicBroadcast> GetAll()
+    public void SaveBroadcast(PublicBroadcast broadcast)
     {
-      throw new NotImplementedException();
+      publicBroadcasts.Add(broadcast);
     }
 
-    public List<Common.Entities.PublicBroadcast> GetSimiliar(int profileId)
+    public List<PublicBroadcast> GetAll()
+    {
+      return publicBroadcasts;
+    }
+
+    public List<PublicBroadcast> GetSimiliar(int profileId)
     {
       throw new NotImplementedException();
     }
