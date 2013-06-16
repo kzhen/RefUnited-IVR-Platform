@@ -15,5 +15,6 @@ namespace RefUnitedIVRPlatform.Common.Interfaces
     int GetUnreadMessageCount(int profileId);
     List<Profile> GetFavourites(int profileId, int pageIdx);
     ProfileMessageCollection GetMessages(int profileId);
+    void AddFavourite(int profileId, int profileIdToFavourite);
   }
 }

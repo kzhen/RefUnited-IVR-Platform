@@ -32,5 +32,7 @@ namespace RefUnitedIVRPlatform.Common.Interfaces
     List<IVRProfile> GetAllProfiles();
 
     bool CheckIfProfileExists(int profileId);
+
+    void AddAsFavourite(int profileId, int profileIdToFavourite);
   }
 }

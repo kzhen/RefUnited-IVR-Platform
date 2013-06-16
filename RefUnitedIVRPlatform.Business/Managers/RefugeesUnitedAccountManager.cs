@@ -72,5 +72,11 @@ namespace RefUnitedIVRPlatform.Business.Managers
 
       return results;
     }
+
+
+    public void AddFavourite(int profileId, int targetProfileId)
+    {
+      var results = apiRequest.AddProfileFavourite(profileId, targetProfileId);
+    }
   }
 }

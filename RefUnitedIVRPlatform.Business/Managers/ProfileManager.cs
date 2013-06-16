@@ -12,11 +12,13 @@ namespace RefUnitedIVRPlatform.Business.Managers
   {
     private IProfileRepository profileRepository;
     private IRecordingRepository recordingRepository;
+    private IRefugeesUnitedAccountManager refUnitedAccountManager;
 
-    public ProfileManager(IProfileRepository repository, IRecordingRepository recordingRepository)
+    public ProfileManager(IProfileRepository repository, IRecordingRepository recordingRepository, IRefugeesUnitedAccountManager refUnitedAccountManager)
     {
       this.profileRepository = repository;
       this.recordingRepository = recordingRepository;
+      this.refUnitedAccountManager = refUnitedAccountManager;
     }
 
     public void CreateProfile(IVRProfile profile)
@@ -130,6 +132,12 @@ namespace RefUnitedIVRPlatform.Business.Managers
       {
         return false;
       }
+    }
+
+
+    public void AddAsFavourite(int profileId, int profileIdToFavourite)
+    {
+      refUnitedAccountManager.AddFavourite(profileId, profileIdToFavourite);
     }
   }
 }
