@@ -85,18 +85,18 @@ namespace RefUnitedIVRPlatform.Web.Controllers
 
     [HttpPost]
     [IVRUrlRoute(IVRRoutes.BROADCASTS_REPLY_PUBLICLY)]
-    public ActionResult RecordPublicReply(VoiceRequest request, int profileId, int lastBroadcastIdx)
+    public ActionResult RecordPublicReply(VoiceRequest request, int profileId, int lastBroadcastIdx, int? subBroadcastIdx)
     {
-      var response = broadcastLogic.RecordPublicReply(request, profileId, lastBroadcastIdx);
+      var response = broadcastLogic.RecordPublicReply(request, profileId, lastBroadcastIdx, subBroadcastIdx);
 
       return IVRResult(response);
     }
 
     [HttpPost]
     [IVRUrlRoute(IVRRoutes.BROADCAST_SAVE_PUBLIC_REPLY)]
-    public ActionResult SavePublicReply(VoiceRequest request, int profileId, int lastBroadcastIdx)
+    public ActionResult SavePublicReply(VoiceRequest request, int profileId, int lastBroadcastIdx, int? subBroadcastIdx)
     {
-      var response = broadcastLogic.SavePublicReply(request, profileId, lastBroadcastIdx);
+      var response = broadcastLogic.SavePublicReply(request, profileId, lastBroadcastIdx, subBroadcastIdx);
 
       return IVRResult(response);
     }

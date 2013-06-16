@@ -133,13 +133,13 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
           response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_REPLY_PRIVATELY, profileId, lastBroadcastIdx));
           return response;
         case "2":
-          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_REPLY_PUBLICLY, profileId, lastBroadcastIdx));
-          return response;
-        case "4":
-          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_PLAY_PUBLIC_REPLY, profileId, lastBroadcastIdx, 0));
+          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_REPLY_PUBLICLY, profileId, lastBroadcastIdx, null));
           return response;
         case "3":
           response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_LISTEN_TO_ALL_PUBLIC, profileId, ++lastBroadcastIdx));
+          return response;
+        case "4":
+          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_PLAY_PUBLIC_REPLY, profileId, lastBroadcastIdx, 0));
           return response;
         default:
           response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
@@ -159,9 +159,6 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
     {
       var response = new TwilioResponse();
 
-      response.Say("Thank you, your response has been sent.");
-      response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
-
       var broadcast = broadcastManager.Get(lastBroadcastIdx);
 
       int fromProfileId = broadcast.FromProfileId;
@@ -172,27 +169,50 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
         fromProfileId = reply.FromProfileId;
       }
 
+      response.Say("Thank you, your response has been sent.");
+
+      if (subBroadcastIdx.HasValue)
+      {
+        //play next broadcast reply
+        response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_PLAY_PUBLIC_REPLY, profileId, lastBroadcastIdx, ++subBroadcastIdx));
+      }
+      else
+      {
+        //play next public broadcast
+        response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_LISTEN_TO_ALL_PUBLIC, profileId, ++lastBroadcastIdx));
+      }
+
       profileManager.SaveRecording(profileId, fromProfileId, request.RecordingUrl);
 
       return response;
     }
 
-    public TwilioResponse RecordPublicReply(VoiceRequest request, int profileId, int lastBroadcastIdx)
+    public TwilioResponse RecordPublicReply(VoiceRequest request, int profileId, int lastBroadcastIdx, int? subBroadcastIdx)
     {
       var response = new TwilioResponse();
       response.Say("At the tone please record your reply.");
-      response.Record(new { action = ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCAST_SAVE_PUBLIC_REPLY, profileId, lastBroadcastIdx), playBeep = true });
+      response.Record(new { action = ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCAST_SAVE_PUBLIC_REPLY, profileId, lastBroadcastIdx, subBroadcastIdx), playBeep = true });
       return response;
     }
 
-    public TwilioResponse SavePublicReply(VoiceRequest request, int profileId, int lastBroadcastIdx)
+    public TwilioResponse SavePublicReply(VoiceRequest request, int profileId, int lastBroadcastIdx, int? subBroadcastIdx)
     {
       var response = new TwilioResponse();
 
-      response.Say("Thank you, your response has been sent.");
-      response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
-
       var broadcast = broadcastManager.Get(lastBroadcastIdx);
+
+      response.Say("Thank you, your response has been sent.");
+
+      if (subBroadcastIdx.HasValue)
+      {
+        //play next broadcast reply
+        response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_PLAY_PUBLIC_REPLY, profileId, lastBroadcastIdx, ++subBroadcastIdx));
+      }
+      else
+      {
+        //play next public broadcast
+        response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_LISTEN_TO_ALL_PUBLIC, profileId, ++lastBroadcastIdx));
+      }
 
       PublicBroadcast broadcastReply = new PublicBroadcast()
       {
@@ -291,7 +311,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
           response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_REPLY_PRIVATELY, profileId, lastBroadcastIdx, subBroadcastIdx));
           return response;
         case "2":
-          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_REPLY_PUBLICLY, profileId, lastBroadcastIdx));
+          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_REPLY_PUBLICLY, profileId, lastBroadcastIdx, subBroadcastIdx));
           return response;
         case "3":
           response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_PLAY_PUBLIC_REPLY, profileId, lastBroadcastIdx, ++subBroadcastIdx));
