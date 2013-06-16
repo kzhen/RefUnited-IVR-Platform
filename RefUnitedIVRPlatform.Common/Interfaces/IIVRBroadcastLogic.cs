@@ -15,11 +15,13 @@ namespace RefUnitedIVRPlatform.Common.Interfaces
     TwilioResponse ListenToBroadcastsMenu(VoiceRequest request, int profileId);
     TwilioResponse ListenToPublicBroadcasts(VoiceRequest request, int profileId, int idx);
     TwilioResponse BroadcastResponseSelection(VoiceRequest request, int profileId, int lastBroadcastIdx);
-    TwilioResponse RecordPrivateReply(VoiceRequest request, int profileId, int lastBroadcastIdx);
-    TwilioResponse SavePrivateReply(VoiceRequest request, int profileId, int lastBroadcastIdx);
+    TwilioResponse RecordPrivateReply(VoiceRequest request, int profileId, int lastBroadcastIdx, int? subBroadcastIdx);
+    TwilioResponse SavePrivateReply(VoiceRequest request, int profileId, int lastBroadcastIdx, int? subBroadcastIdx);
     TwilioResponse RecordPublicReply(VoiceRequest request, int profileId, int lastBroadcastIdx);
     TwilioResponse SavePublicReply(VoiceRequest request, int profileId, int lastBroadcastIdx);
     TwilioResponse ListenToMatchedBroadcasts(VoiceRequest request, int profileId);
     TwilioResponse ListenToBroadcastReplies(VoiceRequest request, int profileId, int lastBroadcastIdx, int subBroadcastIdx);
+    TwilioResponse BroadcastReplyMenuSelection(VoiceRequest request, int profileId, int lastBroadcastIdx, int subBroadcastIdx);
+    TwilioResponse AddResponderAsFavourite(VoiceRequest request, int profileId, int lastBroadcastIdx, int subBroadcastIdx);
   }
 }

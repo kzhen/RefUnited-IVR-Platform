@@ -22,5 +22,7 @@ namespace RefUnitedIVRPlatform.Common
     public const string BROADCAST_SAVE_PRIVATE_REPLY = "SavePrivateReplyToBroadcast";
     public const string BROADCAST_SAVE_PUBLIC_REPLY = "SavePublicReplyToBroadcast";
     public const string BROADCASTS_PLAY_PUBLIC_REPLY = "PlayPublicReplyToBroadcast";
+    public const string BROADCAST_REPLY_RESPONSE_SELECTION = "DetermineResponseToReplyBroadcastMenu";
+    public const string BROADCASTS_ADD_REPLIER_AS_FAVOURITE = "AddReplyUserAsAFavourite";
   }
 }

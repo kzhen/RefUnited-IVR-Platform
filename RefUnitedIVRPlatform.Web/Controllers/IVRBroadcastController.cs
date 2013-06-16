@@ -7,6 +7,7 @@ using RefUnitedIVRPlatform.Common;
 using RefUnitedIVRPlatform.Common.Attributes;
 using RefUnitedIVRPlatform.Common.Interfaces;
 using Twilio.Mvc;
+using Twilio.TwiML;
 
 namespace RefUnitedIVRPlatform.Web.Controllers
 {
@@ -66,18 +67,18 @@ namespace RefUnitedIVRPlatform.Web.Controllers
 
     [HttpPost]
     [IVRUrlRoute(IVRRoutes.BROADCASTS_REPLY_PRIVATELY)]
-    public ActionResult Broadcast_PrivateReply(VoiceRequest request, int profileId, int lastBroadcastIdx)
+    public ActionResult Broadcast_PrivateReply(VoiceRequest request, int profileId, int lastBroadcastIdx, int? subBroadcastIdx)
     {
-      var response = broadcastLogic.RecordPrivateReply(request, profileId, lastBroadcastIdx);
+      var response = broadcastLogic.RecordPrivateReply(request, profileId, lastBroadcastIdx, subBroadcastIdx);
 
       return IVRResult(response);
     }
 
     [HttpPost]
     [IVRUrlRoute(IVRRoutes.BROADCAST_SAVE_PRIVATE_REPLY)]
-    public ActionResult SavePrivateReply(VoiceRequest request, int profileId, int lastBroadcastIdx)
+    public ActionResult SavePrivateReply(VoiceRequest request, int profileId, int lastBroadcastIdx, int? subBroadcastIdx)
     {
-      var response = broadcastLogic.SavePrivateReply(request, profileId, lastBroadcastIdx);
+      var response = broadcastLogic.SavePrivateReply(request, profileId, lastBroadcastIdx, subBroadcastIdx);
 
       return IVRResult(response);
     }
@@ -114,6 +115,24 @@ namespace RefUnitedIVRPlatform.Web.Controllers
     public ActionResult ListenToBroadcastReplies(VoiceRequest request, int profileId, int lastBroadcastIdx, int subBroadcastIdx)
     {
       var response = broadcastLogic.ListenToBroadcastReplies(request, profileId, lastBroadcastIdx, subBroadcastIdx);
+
+      return IVRResult(response);
+    }
+
+    [HttpPost]
+    [IVRUrlRoute(IVRRoutes.BROADCAST_REPLY_RESPONSE_SELECTION)]
+    public ActionResult BroadcastReplyMenuSelection(VoiceRequest request, int profileId, int lastBroadcastIdx, int subBroadcastIdx)
+    {
+      var response = broadcastLogic.BroadcastReplyMenuSelection(request, profileId, lastBroadcastIdx, subBroadcastIdx);
+
+      return IVRResult(response);
+    }
+
+    [HttpPost]
+    [IVRUrlRoute(IVRRoutes.BROADCASTS_ADD_REPLIER_AS_FAVOURITE)]
+    public ActionResult AddResponderAsFavourite(VoiceRequest request, int profileId, int lastBroadcastIdx, int subBroadcastIdx)
+    {
+      TwilioResponse response = broadcastLogic.AddResponderAsFavourite(request, profileId, lastBroadcastIdx, subBroadcastIdx);
 
       return IVRResult(response);
     }

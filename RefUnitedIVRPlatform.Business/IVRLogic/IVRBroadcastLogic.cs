@@ -138,21 +138,24 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
         case "4":
           response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_PLAY_PUBLIC_REPLY, profileId, lastBroadcastIdx, 0));
           return response;
-        default:
+        case "3":
           response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_LISTEN_TO_ALL_PUBLIC, profileId, ++lastBroadcastIdx));
+          return response;
+        default:
+          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
           return response;
       }
     }
 
-    public TwilioResponse RecordPrivateReply(VoiceRequest request, int profileId, int lastBroadcastIdx)
+    public TwilioResponse RecordPrivateReply(VoiceRequest request, int profileId, int lastBroadcastIdx, int? subBroadcastIdx)
     {
       var response = new TwilioResponse();
       response.Say("At the tone please record your reply.");
-      response.Record(new { action = ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCAST_SAVE_PRIVATE_REPLY, profileId, lastBroadcastIdx), playBeep = true });
+      response.Record(new { action = ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCAST_SAVE_PRIVATE_REPLY, profileId, lastBroadcastIdx, subBroadcastIdx), playBeep = true });
       return response;
     }
 
-    public TwilioResponse SavePrivateReply(VoiceRequest request, int profileId, int lastBroadcastIdx)
+    public TwilioResponse SavePrivateReply(VoiceRequest request, int profileId, int lastBroadcastIdx, int? subBroadcastIdx)
     {
       var response = new TwilioResponse();
 
@@ -161,7 +164,15 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
 
       var broadcast = broadcastManager.Get(lastBroadcastIdx);
 
-      profileManager.SaveRecording(profileId, broadcast.FromProfileId, request.RecordingUrl);
+      int fromProfileId = broadcast.FromProfileId;
+
+      if (subBroadcastIdx.HasValue)
+      {
+        var reply = broadcast.BroadcastReplies.Skip(subBroadcastIdx.Value).Take(1).SingleOrDefault();
+        fromProfileId = reply.FromProfileId;
+      }
+
+      profileManager.SaveRecording(profileId, fromProfileId, request.RecordingUrl);
 
       return response;
     }
@@ -194,12 +205,10 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       return response;
     }
 
-
     public TwilioResponse ListenToMatchedBroadcasts(VoiceRequest request, int profileId)
     {
       throw new NotImplementedException();
     }
-
 
     public TwilioResponse ListenToBroadcastReplies(VoiceRequest request, int profileId, int lastBroadcastIdx, int subBroadcastIdx)
     {
@@ -247,17 +256,71 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       response.Say(string.Format("Playing broadcast reply from {0}", fromProfile.FullName));
       response.Play(reply.Url);
 
-      //response.BeginGather(new { action = ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCAST_RESPONSE_SELECTION, profileId, idx), playBeep = true, numDigits = 1 });
-      //response.Say("Press one to reply privately to this broadcast.");
-      //response.Say("Press two to reply publicly to this broadcast.");
-      //response.Say("Press three to listen to the next broadcast reply");
+      if (broadcast.BroadcastReplies.Count - subBroadcastIdx <= 0)
+      {
+        response.Say("That was the last reply to this broadcast.");
+      }
 
-      //if (broadcast.BroadcastReplies.Count > 0)
-      //{
-      //  response.Say("Press four to listen to responses to this broadcast");
-      //}
+      response.BeginGather(new { action = ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCAST_REPLY_RESPONSE_SELECTION, profileId, lastBroadcastIdx, subBroadcastIdx), playBeep = true, numDigits = 1 });
+      response.Say("Press one to reply privately to this broadcast.");
+      response.Say("Press two to reply publicly to this broadcast.");
 
-      //response.EndGather();
+      if (broadcast.BroadcastReplies.Count - subBroadcastIdx > 0)
+      {
+        response.Say("Press three to listen to the next broadcast reply");
+      }
+
+      response.Say("Press four to listen to the next public broadcast");
+
+      response.Say("Press five to add person as a favourite");
+
+      response.EndGather();
+
+      return response;
+    }
+
+    public TwilioResponse BroadcastReplyMenuSelection(VoiceRequest request, int profileId, int lastBroadcastIdx, int subBroadcastIdx)
+    {
+      var response = new TwilioResponse();
+
+      var selection = request.Digits;
+
+      switch (selection)
+      {
+        case "1":
+          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_REPLY_PRIVATELY, profileId, lastBroadcastIdx, subBroadcastIdx));
+          return response;
+        case "2":
+          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_REPLY_PUBLICLY, profileId, lastBroadcastIdx));
+          return response;
+        case "3":
+          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_PLAY_PUBLIC_REPLY, profileId, lastBroadcastIdx, ++subBroadcastIdx));
+          return response;
+        case "4":
+          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_LISTEN_TO_ALL_PUBLIC, profileId, ++lastBroadcastIdx));
+          return response;
+        case "5":
+          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_ADD_REPLIER_AS_FAVOURITE, profileId, lastBroadcastIdx, subBroadcastIdx));
+          return response;
+        default:
+          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
+          return response;
+      }
+    }
+
+    public TwilioResponse AddResponderAsFavourite(VoiceRequest request, int profileId, int lastBroadcastIdx, int subBroadcastIdx)
+    {
+      var broadcast = broadcastManager.GetAll().Skip(lastBroadcastIdx).Take(1).FirstOrDefault();
+      var reply = broadcast.BroadcastReplies.Skip(subBroadcastIdx).Take(1).FirstOrDefault();
+
+      int profileIdToFavourite = reply.FromProfileId;
+      profileManager.AddAsFavourite(profileId, profileIdToFavourite);
+
+      var profile = profileManager.GetProfile(profileIdToFavourite);
+
+      var response = new TwilioResponse();
+
+      response.Say(string.Format("{0} has been added as a favourite", profile.FullName));
       response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
 
       return response;
