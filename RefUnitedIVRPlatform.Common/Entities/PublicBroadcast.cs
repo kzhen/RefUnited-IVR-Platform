@@ -10,5 +10,11 @@ namespace RefUnitedIVRPlatform.Common.Entities
   {
     public int FromProfileId { get; set; }
     public string Url { get; set; }
+    public List<PublicBroadcast> BroadcastReplies { get; private set; }
+
+    public PublicBroadcast()
+    {
+      BroadcastReplies = new List<PublicBroadcast>();
+    }
   }
 }

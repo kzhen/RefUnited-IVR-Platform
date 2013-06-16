@@ -19,5 +19,7 @@ namespace RefUnitedIVRPlatform.Common.Interfaces
     TwilioResponse SavePrivateReply(VoiceRequest request, int profileId, int lastBroadcastIdx);
     TwilioResponse RecordPublicReply(VoiceRequest request, int profileId, int lastBroadcastIdx);
     TwilioResponse SavePublicReply(VoiceRequest request, int profileId, int lastBroadcastIdx);
+    TwilioResponse ListenToMatchedBroadcasts(VoiceRequest request, int profileId);
+    TwilioResponse ListenToBroadcastReplies(VoiceRequest request, int profileId, int lastBroadcastIdx, int subBroadcastIdx);
   }
 }

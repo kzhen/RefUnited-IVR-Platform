@@ -39,7 +39,7 @@ namespace RefUnitedIVRPlatform.Business.Managers
 
     public void SaveBroadcastReply(PublicBroadcast broadcast, PublicBroadcast broadcastReply)
     {
-      
+      broadcast.BroadcastReplies.Add(broadcastReply);
     }
   }
 }

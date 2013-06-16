@@ -99,5 +99,23 @@ namespace RefUnitedIVRPlatform.Web.Controllers
 
       return IVRResult(response);
     }
+
+    [HttpPost]
+    [IVRUrlRoute(IVRRoutes.BROADCAST_LISTEN_TO_MATCHED)]
+    public ActionResult ListenToMatchedBroadcasts(VoiceRequest request, int profileId)
+    {
+      var response = broadcastLogic.ListenToMatchedBroadcasts(request, profileId);
+
+      return IVRResult(response);
+    }
+
+    [HttpPost]
+    [IVRUrlRoute(IVRRoutes.BROADCASTS_PLAY_PUBLIC_REPLY)]
+    public ActionResult ListenToBroadcastReplies(VoiceRequest request, int profileId, int lastBroadcastIdx, int subBroadcastIdx)
+    {
+      var response = broadcastLogic.ListenToBroadcastReplies(request, profileId, lastBroadcastIdx, subBroadcastIdx);
+
+      return IVRResult(response);
+    }
   }
 }

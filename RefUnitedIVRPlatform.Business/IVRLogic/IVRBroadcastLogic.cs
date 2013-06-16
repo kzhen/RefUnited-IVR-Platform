@@ -110,6 +110,12 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       response.Say("Press one to reply privately to this broadcast.");
       response.Say("Press two to reply publicly to this broadcast.");
       response.Say("Press three to listen to the next broadcast.");
+
+      if (broadcast.BroadcastReplies.Count > 0)
+      {
+        response.Say("Press four to listen to responses to this broadcast");
+      }
+
       response.EndGather();
       
       return response;
@@ -128,6 +134,9 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
           return response;
         case "2":
           response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_REPLY_PUBLICLY, profileId, lastBroadcastIdx));
+          return response;
+        case "4":
+          response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_PLAY_PUBLIC_REPLY, profileId, lastBroadcastIdx, 0));
           return response;
         default:
           response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCASTS_LISTEN_TO_ALL_PUBLIC, profileId, ++lastBroadcastIdx));
@@ -181,6 +190,75 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       };
 
       broadcastManager.SaveBroadcastReply(broadcast, broadcastReply);
+
+      return response;
+    }
+
+
+    public TwilioResponse ListenToMatchedBroadcasts(VoiceRequest request, int profileId)
+    {
+      throw new NotImplementedException();
+    }
+
+
+    public TwilioResponse ListenToBroadcastReplies(VoiceRequest request, int profileId, int lastBroadcastIdx, int subBroadcastIdx)
+    {
+      var response = new TwilioResponse();
+
+      PublicBroadcast broadcast;
+
+      try
+      {
+        broadcast = broadcastManager.GetAll().Skip(lastBroadcastIdx).Take(1).FirstOrDefault();
+      }
+      catch (Exception)
+      {
+        broadcast = null;
+      }
+
+      if (broadcast == null)
+      {
+        response.Say("Broadcast not found, returning to the main menu");
+        response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
+
+        return response;
+      }
+
+      if (broadcast.BroadcastReplies == null || broadcast.BroadcastReplies.Count == 0)
+      {
+        response.Say("Broadcast has no replies, returning to the main menu");
+        response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
+
+        return response;
+      }
+
+      var reply = broadcast.BroadcastReplies.Skip(subBroadcastIdx).Take(1).FirstOrDefault();
+
+      if (reply == null)
+      {
+        response.Say("No more replies, returning to the main menu");
+        response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
+
+        return response;
+      }
+
+      var fromProfile = profileManager.GetProfile(reply.FromProfileId);
+
+      response.Say(string.Format("Playing broadcast reply from {0}", fromProfile.FullName));
+      response.Play(reply.Url);
+
+      //response.BeginGather(new { action = ivrRouteProvider.GetUrlMethod(IVRRoutes.BROADCAST_RESPONSE_SELECTION, profileId, idx), playBeep = true, numDigits = 1 });
+      //response.Say("Press one to reply privately to this broadcast.");
+      //response.Say("Press two to reply publicly to this broadcast.");
+      //response.Say("Press three to listen to the next broadcast reply");
+
+      //if (broadcast.BroadcastReplies.Count > 0)
+      //{
+      //  response.Say("Press four to listen to responses to this broadcast");
+      //}
+
+      //response.EndGather();
+      response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
 
       return response;
     }
