@@ -15,11 +15,13 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
   {
     private IProfileManager profileManager;
     private IRefugeesUnitedAccountManager refUnitedAcctManager;
+    private IIVRRouteProvider routeProvider;
 
-    public IVRMainLogic(IProfileManager profileManager, IRefugeesUnitedAccountManager refUnitedAcctManager)
+    public IVRMainLogic(IProfileManager profileManager, IRefugeesUnitedAccountManager refUnitedAcctManager, IIVRRouteProvider routeProvider)
     {
       this.profileManager = profileManager;
       this.refUnitedAcctManager = refUnitedAcctManager;
+      this.routeProvider = routeProvider;
     }
 
     public TwilioResponse GetMainMenu()
@@ -61,22 +63,22 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
             break;
           case 2:
             response.Say("Looking up messages");
-            response.Redirect(string.Format("/IVRMain/ReadPlatformMessages?profileId={0}", profileId));
+            response.Redirect(routeProvider.GetUrlMethod(IVRRoutes.READ_PLATFORM_MESSAGES, profileId));
             break;
           case 3:
-            response.Redirect(string.Format("/IVRMain/SendFavMessage_ListFavs?profileId={0}", profileId));
+            response.Redirect(routeProvider.GetUrlMethod(IVRRoutes.SEND_MESSAGE_TO_FAVOURITE, profileId));
             break;
           case 4:
-            response.Redirect(string.Format("/IVRMain/PlayRecordedMessage?profileId={0}", profileId));
+            response.Redirect(routeProvider.GetUrlMethod(IVRRoutes.PLAY_RECORDED_MESSAGES, profileId));
             break;
           case 5:
-            response.Redirect(string.Format("/IVRBroadcast/RecordBroadcast?profileId={0}", profileId));
+            response.Redirect(routeProvider.GetUrlMethod(IVRRoutes.BROADCAST_RECORD, profileId));
             break;
           case 6:
-            response.Redirect(string.Format("/IVRBroadcast/ListenToBroadcasts?profileId={0}", profileId));
+            response.Redirect(routeProvider.GetUrlMethod(IVRRoutes.BROADCAST_MENU, profileId));
             break;
           default:
-            response.Redirect("/IVRMain/MainMenu");
+            response.Redirect(routeProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
             break;
         }
       }
@@ -102,7 +104,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       if (favourites == null || favourites.Count == 0)
       {
         response.Say("You have no favourites to send voice messages to.");
-        response.Redirect("/IVRMain/MainMenu");
+        response.Redirect(routeProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
 
         return response;
       }

@@ -24,5 +24,8 @@ namespace RefUnitedIVRPlatform.Common
     public const string BROADCASTS_PLAY_PUBLIC_REPLY = "PlayPublicReplyToBroadcast";
     public const string BROADCAST_REPLY_RESPONSE_SELECTION = "DetermineResponseToReplyBroadcastMenu";
     public const string BROADCASTS_ADD_REPLIER_AS_FAVOURITE = "AddReplyUserAsAFavourite";
+    public const string READ_PLATFORM_MESSAGES = "ReadPlatformMessages";
+    public const string SEND_MESSAGE_TO_FAVOURITE = "SendMessageToFavourite";
+    public const string PLAY_RECORDED_MESSAGES = "PlayRecordedMessages";
   }
 }

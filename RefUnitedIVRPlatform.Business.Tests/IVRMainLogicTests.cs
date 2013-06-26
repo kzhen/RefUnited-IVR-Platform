@@ -27,8 +27,9 @@ namespace RefUnitedIVRPlatform.Business.Tests
         var profileManager = new Mock<IProfileManager>();
         var apiRequest = new Mock<IApiRequest>();
         var refUnitedAcctMaanger = new RefugeesUnitedAccountManager(apiRequest.Object);
+        var routeProvider = new Mock<IIVRRouteProvider>();
 
-        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctMaanger);
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctMaanger, routeProvider.Object);
 
         string favs = string.Empty;
         int pageIdx = 0;
@@ -59,9 +60,10 @@ namespace RefUnitedIVRPlatform.Business.Tests
         var profileManager = new Mock<IProfileManager>();
         var apiRequest = new Mock<IApiRequest>();
         var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
+        var routeProvider = new Mock<IIVRRouteProvider>();
 
         //this is what we are testing!
-        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager, routeProvider.Object);
 
         var favs = new List<RefugeesUnitedApi.ApiEntities.Profile>();
 
@@ -105,6 +107,7 @@ namespace RefUnitedIVRPlatform.Business.Tests
         var profileId = 324784;
         var profileManager = new Mock<IProfileManager>();
         var refUnitedAcctManager = new Mock<IRefugeesUnitedAccountManager>();
+        var routeProvider = new Mock<IIVRRouteProvider>();
 
         var favs = new List<RefugeesUnitedApi.ApiEntities.Profile>();
 
@@ -124,7 +127,7 @@ namespace RefUnitedIVRPlatform.Business.Tests
 
         refUnitedAcctManager.Setup(m => m.GetFavourites(profileId, 0)).Returns(favs);
 
-        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager.Object);
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager.Object, routeProvider.Object);
 
         var response = logic.ListFavourites(new Twilio.Mvc.VoiceRequest(), profileId, 0);
 
@@ -139,8 +142,9 @@ namespace RefUnitedIVRPlatform.Business.Tests
         var profileId = 324784;
         var profileManager = new Mock<IProfileManager>();
         var refUnitedAcctManager = new Mock<IRefugeesUnitedAccountManager>();
+        var routeProvider = new Mock<IIVRRouteProvider>();
 
-        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager.Object);
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager.Object, routeProvider.Object);
 
         var response = logic.ListFavourites(new Twilio.Mvc.VoiceRequest(), profileId, 0);
 
@@ -160,11 +164,12 @@ namespace RefUnitedIVRPlatform.Business.Tests
         var profileManager = new Mock<IProfileManager>();
         var apiRequest = new Mock<IApiRequest>();
         var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
+        var routeProvider = new Mock<IIVRRouteProvider>();
 
         profileManager.Setup(m => m.GetRecordings(profileId)).Returns(new List<Common.Entities.Recording>());
 
         //this is what we are testing!
-        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager, routeProvider.Object);
 
         var result = logic.PlayRecordedVoiceMessage(new VoiceRequest(), profileId, null);
 
@@ -178,6 +183,7 @@ namespace RefUnitedIVRPlatform.Business.Tests
         var profileManager = new Mock<IProfileManager>();
         var apiRequest = new Mock<IApiRequest>();
         var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
+        var routeProvider = new Mock<IIVRRouteProvider>();
 
         profileManager.Setup(m => m.GetRecordings(profileId)).Returns(new List<Common.Entities.Recording>()
           {
@@ -188,7 +194,7 @@ namespace RefUnitedIVRPlatform.Business.Tests
           });
 
         //this is what we are testing!
-        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager, routeProvider.Object);
 
         var result = logic.PlayRecordedVoiceMessage(new VoiceRequest(), profileId, 4);
 
@@ -203,6 +209,7 @@ namespace RefUnitedIVRPlatform.Business.Tests
         var profileManager = new Mock<IProfileManager>();
         var apiRequest = new Mock<IApiRequest>();
         var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
+        var routeProvider = new Mock<IIVRRouteProvider>();
 
         profileManager.Setup(m => m.GetRecordings(profileId)).Returns(new List<Common.Entities.Recording>()
           {
@@ -210,7 +217,7 @@ namespace RefUnitedIVRPlatform.Business.Tests
           });
 
         //this is what we are testing!
-        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager, routeProvider.Object);
 
         var result = logic.PlayRecordedVoiceMessage(new VoiceRequest(), profileId, 0);
 
@@ -229,6 +236,7 @@ namespace RefUnitedIVRPlatform.Business.Tests
         var profileManager = new Mock<IProfileManager>();
         var apiRequest = new Mock<IApiRequest>();
         var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
+        var routeProvider = new Mock<IIVRRouteProvider>();
 
         var voiceRequest = new VoiceRequest() { Digits = "1" };
 
@@ -238,7 +246,7 @@ namespace RefUnitedIVRPlatform.Business.Tests
           });
 
         //this is what we are testing!
-        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager, routeProvider.Object);
 
         //var result = logic.PlayRecordedVoiceMessage(new VoiceRequest(), profileId, 0);
         var result = logic.PlayRecordedMessage_Response(voiceRequest, profileId, 0, 111);
@@ -254,6 +262,7 @@ namespace RefUnitedIVRPlatform.Business.Tests
         var profileManager = new Mock<IProfileManager>();
         var apiRequest = new Mock<IApiRequest>();
         var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
+        var routeProvider = new Mock<IIVRRouteProvider>();
 
         var voiceRequest = new VoiceRequest() { Digits = "2" };
 
@@ -263,7 +272,7 @@ namespace RefUnitedIVRPlatform.Business.Tests
           });
 
         //this is what we are testing!
-        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager, routeProvider.Object);
 
         var result = logic.PlayRecordedMessage_Response(voiceRequest, profileId, 0, 111);
 
@@ -279,6 +288,7 @@ namespace RefUnitedIVRPlatform.Business.Tests
         var profileManager = new Mock<IProfileManager>();
         var apiRequest = new Mock<IApiRequest>();
         var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
+        var routeProvider = new Mock<IIVRRouteProvider>();
 
         var voiceRequest = new VoiceRequest() { Digits = "3" };
 
@@ -288,7 +298,7 @@ namespace RefUnitedIVRPlatform.Business.Tests
           });
 
         //this is what we are testing!
-        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager, routeProvider.Object);
 
         var result = logic.PlayRecordedMessage_Response(voiceRequest, profileId, 0, 111);
 
@@ -303,6 +313,7 @@ namespace RefUnitedIVRPlatform.Business.Tests
         var profileManager = new Mock<IProfileManager>();
         var apiRequest = new Mock<IApiRequest>();
         var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
+        var routeProvider = new Mock<IIVRRouteProvider>();
 
         var voiceRequest = new VoiceRequest() { Digits = "4" };
 
@@ -312,7 +323,7 @@ namespace RefUnitedIVRPlatform.Business.Tests
           });
 
         //this is what we are testing!
-        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager, routeProvider.Object);
 
         var result = logic.PlayRecordedMessage_Response(voiceRequest, profileId, 0, 111);
 
@@ -333,6 +344,7 @@ namespace RefUnitedIVRPlatform.Business.Tests
         var profileManager = new Mock<IProfileManager>();
         var apiRequest = new Mock<IApiRequest>();
         var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
+        var routeProvider = new Mock<IIVRRouteProvider>();
 
         var voiceRequest = new VoiceRequest() { Digits = "4" };
 
@@ -342,7 +354,7 @@ namespace RefUnitedIVRPlatform.Business.Tests
           });
 
         //this is what we are testing!
-        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager);
+        var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager, routeProvider.Object);
 
         var result = logic.SaveVoiceMessageReply(voiceRequest, profileId, 0, fromProfileId);
 

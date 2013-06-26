@@ -55,7 +55,7 @@ namespace RefUnitedIVRPlatform.Web
       builder.Register<ISMSReceiverLogic>(m=>new SMSReceiverLogic(twilioAccountSid, twilioAuthToken, twilioPhoneNumber)).InstancePerHttpRequest();
 
       builder.Register<IIVREntryLogic>(m => new IVREntryLogic(m.Resolve<IProfileManager>())).InstancePerHttpRequest();
-      builder.Register<IIVRMainLogic>(m => new IVRMainLogic(m.Resolve<IProfileManager>(), m.Resolve<IRefugeesUnitedAccountManager>()));
+      builder.Register<IIVRMainLogic>(m => new IVRMainLogic(m.Resolve<IProfileManager>(), m.Resolve<IRefugeesUnitedAccountManager>(), m.Resolve<IIVRRouteProvider>()));
       builder.Register<IIVRAuthenticateLogic>(m => new IVRAuthenticateLogic(m.Resolve<IProfileManager>()));
       builder.Register<IIVRBroadcastLogic>(m => new IVRBroadcastLogic(m.Resolve<IBroadcastManager>(), m.Resolve<IIVRRouteProvider>(), m.Resolve<IProfileManager>()));
 
