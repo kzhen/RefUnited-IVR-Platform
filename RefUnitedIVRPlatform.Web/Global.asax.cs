@@ -56,7 +56,7 @@ namespace RefUnitedIVRPlatform.Web
 
       builder.Register<IIVREntryLogic>(m => new IVREntryLogic(m.Resolve<IProfileManager>())).InstancePerHttpRequest();
       builder.Register<IIVRMainLogic>(m => new IVRMainLogic(m.Resolve<IProfileManager>(), m.Resolve<IRefugeesUnitedAccountManager>(), m.Resolve<IIVRRouteProvider>()));
-      builder.Register<IIVRAuthenticateLogic>(m => new IVRAuthenticateLogic(m.Resolve<IProfileManager>()));
+      builder.Register<IIVRAuthenticateLogic>(m => new IVRAuthenticateLogic(m.Resolve<IProfileManager>(), m.Resolve<IIVRRouteProvider>()));
       builder.Register<IIVRBroadcastLogic>(m => new IVRBroadcastLogic(m.Resolve<IBroadcastManager>(), m.Resolve<IIVRRouteProvider>(), m.Resolve<IProfileManager>()));
 
       builder.RegisterControllers(typeof(MvcApplication).Assembly);

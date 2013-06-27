@@ -1,4 +1,5 @@
-﻿using RefUnitedIVRPlatform.Common.Interfaces;
+﻿using RefUnitedIVRPlatform.Common;
+using RefUnitedIVRPlatform.Common.Interfaces;
 using RefUnitedIVRPlatform.Resources;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,12 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
   {
     private IProfileManager profileManager;
     private TwiMLHelper twiMLHelper;
+    private IIVRRouteProvider routeProvider;
 
-    public IVRAuthenticateLogic(IProfileManager profileManager)
+    public IVRAuthenticateLogic(IProfileManager profileManager, IIVRRouteProvider routeProvider)
     {
       this.profileManager = profileManager;
+      this.routeProvider = routeProvider;
     }
 
     public TwilioResponse GetAuthentication(VoiceRequest request, string language)
@@ -36,16 +39,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       IVRAuthLang.Culture = new System.Globalization.CultureInfo(language);
       twiMLHelper = new TwiMLHelper(language, LanguageHelper.IsImplementedAsMP3(language));
 
-      string lookupPhoneNumber = string.Empty;
-
-      if (request.Direction.Equals("inbound"))
-      {
-        lookupPhoneNumber = request.From;
-      }
-      else if (request.Direction.Equals("outbound-api"))
-      {
-        lookupPhoneNumber = request.To;
-      }
+      string lookupPhoneNumber = request.GetOriginatingNumber();
 
       var pin = request.Digits;
 
@@ -55,7 +49,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
 
       if (result)
       {
-        response.Redirect(string.Format("/IVRMain/MainMenu?language={0}", language), "POST");
+        response.Redirect(routeProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU, language), "POST");
       }
       else
       {
