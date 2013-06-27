@@ -45,7 +45,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       });
 
       response.Say("Thankyou, your broadcast has been sent.");
-      response.Redirect("/IVRMain/MainMenu");
+      response.Redirect(ivrRouteProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
 
       return response;
     }

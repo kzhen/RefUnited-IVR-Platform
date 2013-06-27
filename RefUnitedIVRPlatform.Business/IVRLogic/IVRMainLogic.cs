@@ -146,7 +146,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       }
       else if (request.Digits.Equals("*"))
       {
-        response.Redirect("/IVRMain/MainMenu");
+        response.Redirect(routeProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
 
         return response;
       }
@@ -171,7 +171,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
 
       response.Say("Thank you. Your message has been saved.");
 
-      response.Redirect("/IVRMain/MainMenu");
+      response.Redirect(routeProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
 
       return response;
     }
@@ -185,7 +185,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       if (voiceMessages == null || voiceMessages.Count == 0)
       {
         response.Say("You have no voice messages");
-        response.Redirect("/IVRMain/MainMenu");
+        response.Redirect(routeProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
 
         return response;
       }
@@ -193,7 +193,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       if (recordingIdx.HasValue && recordingIdx.Value >= voiceMessages.Count)
       {
         response.Say("No more messages.");
-        response.Redirect("/IVRMain/MainMenu");
+        response.Redirect(routeProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
 
         return response;
       }
@@ -282,7 +282,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       if (messages.threads == null || messages.threads.Length == 0)
       {
         response.Say("You have no messages.");
-        response.Redirect("/IVRMain/MainMenu");
+        response.Redirect(routeProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
 
         return response;
       }
@@ -293,7 +293,7 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
         response.Say(msg.TextSnippet);
       }
 
-      response.Redirect("/IVRMain/MainMenu");
+      response.Redirect(routeProvider.GetUrlMethod(IVRRoutes.PLAY_MAIN_MENU));
 
       return response;
     }
