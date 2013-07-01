@@ -55,14 +55,8 @@ namespace RefUnitedIVRPlatform.Business.IVRLogic
       {
         twiMLHelper.SayOrPlay(response, IVRAuthLang.IncorrectPIN);
 
-        //DEBUG
-        response.Say("You entered: " + string.Join(" ", pin.ToArray()));
-        response.Say("But the correct pin was: " + string.Join(" ", correctPin.ToArray()));
-        //DEBUG
-
         response.Hangup();
       }
-
 
       return response;
     }
