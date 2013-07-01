@@ -144,6 +144,8 @@ namespace RefUnitedIVRPlatform.Business.Tests
         var refUnitedAcctManager = new Mock<IRefugeesUnitedAccountManager>();
         var routeProvider = new Mock<IIVRRouteProvider>();
 
+        routeProvider.Setup(m => m.GetUrlMethod(RefUnitedIVRPlatform.Common.IVRRoutes.PLAY_MAIN_MENU)).Returns("/IVRMain/MainMenu");
+
         var logic = new IVRMainLogic(profileManager.Object, refUnitedAcctManager.Object, routeProvider.Object);
 
         var response = logic.ListFavourites(new Twilio.Mvc.VoiceRequest(), profileId, 0);
@@ -166,6 +168,8 @@ namespace RefUnitedIVRPlatform.Business.Tests
         var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
         var routeProvider = new Mock<IIVRRouteProvider>();
 
+        routeProvider.Setup(m => m.GetUrlMethod(RefUnitedIVRPlatform.Common.IVRRoutes.PLAY_MAIN_MENU)).Returns("/IVRMain/MainMenu");
+
         profileManager.Setup(m => m.GetRecordings(profileId)).Returns(new List<Common.Entities.Recording>());
 
         //this is what we are testing!
@@ -184,6 +188,8 @@ namespace RefUnitedIVRPlatform.Business.Tests
         var apiRequest = new Mock<IApiRequest>();
         var refUnitedAcctManager = new RefugeesUnitedAccountManager(apiRequest.Object);
         var routeProvider = new Mock<IIVRRouteProvider>();
+
+        routeProvider.Setup(m => m.GetUrlMethod(RefUnitedIVRPlatform.Common.IVRRoutes.PLAY_MAIN_MENU)).Returns("/IVRMain/MainMenu");
 
         profileManager.Setup(m => m.GetRecordings(profileId)).Returns(new List<Common.Entities.Recording>()
           {
